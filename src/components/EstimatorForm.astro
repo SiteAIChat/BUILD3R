@@ -332,9 +332,9 @@ const initialPreview = calculateEstimate({
         throw new Error(data.error || 'Failed to submit estimate');
       }
 
-      refEl.textContent = data.estimateId || '—';
-      successEl.classList.remove('hidden');
-      btn.textContent = 'Estimate saved ✓';
+      // Redirect to thank you page
+      const ref = data.estimateId || '';
+      window.location.href = `/estimate-thanks${ref ? '?ref=' + encodeURIComponent(ref) : ''}`;
     } catch (err: any) {
       errorEl.textContent = err.message || 'Something went wrong. Please try again.';
       errorEl.classList.remove('hidden');

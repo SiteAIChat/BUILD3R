@@ -1,0 +1,111 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+export const prerender = false;
+
+// Get estimate ref from query param if present
+const url = new URL(Astro.request.url);
+const ref = url.searchParams.get('ref') || '';
+---
+
+<BaseLayout title="Estimate Received — BUILD3R" description="Thanks for requesting an estimate. Book a call to discuss next steps.">
+  <meta slot="head" name="robots" content="noindex, nofollow" />
+
+  <main class="relative">
+    <!-- Hero -->
+    <section class="relative overflow-hidden">
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-brand-blue-50 via-white to-brand-purple-50"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 pattern-dots" style="--pattern-color: rgba(37, 99, 235, 0.12);"></div>
+
+      <div class="relative mx-auto w-full max-w-3xl px-6 pb-12 pt-24 text-center md:px-8">
+        <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-brand-green-100">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-brand-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+
+        <h1 class="text-4xl font-semibold tracking-tight text-ink-900 md:text-5xl">
+          Your estimate is on the way
+        </h1>
+        <p class="mt-4 text-lg leading-relaxed text-ink-600">
+          We've received your project details and you'll get an email shortly with a summary of your estimate. 
+          The next step? Let's talk through the specifics.
+        </p>
+
+        {ref && (
+          <p class="mt-4 text-sm text-ink-400">
+            Reference: <span class="font-mono text-ink-500">{ref}</span>
+          </p>
+        )}
+      </div>
+    </section>
+
+    <!-- What happens next -->
+    <section class="mx-auto w-full max-w-4xl px-6 py-12 md:px-8">
+      <div class="grid gap-8 md:grid-cols-3">
+        <div class="rounded-xl2 border border-ink-200/60 bg-white/90 p-6 shadow-soft text-center">
+          <div class="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-brand-blue-100 text-brand-blue-600 font-bold">1</div>
+          <h3 class="font-semibold text-ink-900">Check your inbox</h3>
+          <p class="mt-2 text-sm text-ink-600">You'll receive a summary of your estimate with project details and pricing range.</p>
+        </div>
+        <div class="rounded-xl2 border border-ink-200/60 bg-white/90 p-6 shadow-soft text-center">
+          <div class="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-brand-purple-100 text-brand-purple-600 font-bold">2</div>
+          <h3 class="font-semibold text-ink-900">Book a call</h3>
+          <p class="mt-2 text-sm text-ink-600">We'll discuss your goals, refine the scope, and provide a precise quote.</p>
+        </div>
+        <div class="rounded-xl2 border border-ink-200/60 bg-white/90 p-6 shadow-soft text-center">
+          <div class="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-brand-green-100 text-brand-green-600 font-bold">3</div>
+          <h3 class="font-semibold text-ink-900">Get started</h3>
+          <p class="mt-2 text-sm text-ink-600">Once aligned, we kick off within days — not weeks.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cal.com embed -->
+    <section class="mx-auto w-full max-w-4xl px-6 pb-24 md:px-8">
+      <div class="rounded-xl2 border border-ink-200/60 bg-white/90 p-8 shadow-soft">
+        <div class="mb-6 text-center">
+          <h2 class="text-2xl font-semibold text-ink-900">Book your discovery call</h2>
+          <p class="mt-2 text-ink-600">Pick a time that works and we'll come prepared with your estimate details.</p>
+        </div>
+
+        <div id="cal-embed" class="min-h-[500px]">
+          <!-- Cal.com inline embed -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Fallback CTA -->
+    <section class="mx-auto w-full max-w-3xl px-6 pb-24 text-center md:px-8">
+      <div class="rounded-xl2 border border-brand-blue-100 bg-brand-blue-50/50 p-6">
+        <p class="text-sm text-ink-600">
+          Prefer email? No problem — just reply to the estimate email we'll send you, or reach out at
+          <a href="mailto:hello@build3r.io" class="font-semibold text-brand-blue-600 underline hover:text-brand-blue-700">hello@build3r.io</a>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Cal.com embed script -->
+  <script is:inline>
+    (function() {
+      const script = document.createElement('script');
+      script.src = 'https://app.cal.com/embed/embed.js';
+      script.async = true;
+      script.onload = function() {
+        Cal("init", {origin:"https://cal.com"});
+        Cal("inline", {
+          elementOrSelector: "#cal-embed",
+          calLink: "build3r/30min",
+          layout: "month_view"
+        });
+        Cal("ui", {
+          styles: { branding: { brandColor: "#2563eb" } },
+          hideEventTypeDetails: false,
+          layout: "month_view"
+        });
+      };
+      document.head.appendChild(script);
+    })();
+  </script>
+</BaseLayout>
