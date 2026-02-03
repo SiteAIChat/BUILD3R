@@ -3,10 +3,11 @@ import type { APIRoute } from 'astro';
 export const prerender = false;
 
 const GH_API_BASE = 'https://auto.mation.cc/build3r/wp-json/gh/v4';
-const GH_TOKEN = import.meta.env.GH_TOKEN || '';
-const GH_PUBLIC_KEY = import.meta.env.GH_PUBLIC_KEY || '';
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
+  const runtime = (locals as any).runtime;
+  const GH_TOKEN = runtime?.env?.GH_TOKEN || import.meta.env.GH_TOKEN || '';
+  const GH_PUBLIC_KEY = runtime?.env?.GH_PUBLIC_KEY || import.meta.env.GH_PUBLIC_KEY || '';
   try {
     const body = await request.json();
     const { firstName, lastName, email, projectType, complexity, size, speed, addons, estimateRange, timeline } = body;
@@ -18,7 +19,7 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
-    // Create or update contact in Groundhog
+    // Create or update contact in Groundhog with tags
     const contactRes = await fetch(`${GH_API_BASE}/contacts`, {
       method: 'POST',
       headers: {
@@ -30,6 +31,7 @@ export const POST: APIRoute = async ({ request }) => {
         email,
         first_name: firstName,
         last_name: lastName || '',
+        tags: ['estimate-request', `service:${projectType || 'unknown'}`],
         meta: {
           source: 'build3r.io',
           estimate_project_type: projectType || '',
@@ -44,22 +46,7 @@ export const POST: APIRoute = async ({ request }) => {
     });
 
     const contactData = await contactRes.json();
-    const contactId = contactData?.item?.ID || contactData?.ID;
-
-    // Add tags
-    if (contactId) {
-      await fetch(`${GH_API_BASE}/contacts/${contactId}/tags`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Gh-Token': GH_TOKEN,
-          'Gh-Public-Key': GH_PUBLIC_KEY,
-        },
-        body: JSON.stringify({
-          tags: ['estimate-request', `service:${projectType || 'unknown'}`],
-        }),
-      });
-    }
+    const contactId = contactData?.item?.ID || contactData?.item?.data?.ID;
 
     // Generate a simple reference ID
     const estimateId = `EST-${Date.now().toString(36).toUpperCase()}`;
