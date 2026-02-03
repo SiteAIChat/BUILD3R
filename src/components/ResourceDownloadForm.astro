@@ -66,7 +66,7 @@ const formId = `dl-form-${resourceTitle.replace(/\s+/g, '-').toLowerCase()}`;
 </div>
 
 <script>
-  const SUBMIT_URL = "https://n8n.build3r.io/webhook/resource-download";
+  const SUBMIT_URL = "/api/resource-download";
 
   document.querySelectorAll('[data-resource-form]').forEach((form) => {
     form.addEventListener('submit', async (e) => {
