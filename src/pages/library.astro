@@ -1,0 +1,68 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { resources } from '@/lib/content/resources';
+
+const LIBRARY_TOKEN = 'b3r-6c5ce5c7';
+
+// Check for valid token - redirect to homepage if missing/invalid
+const url = new URL(Astro.request.url);
+const token = url.searchParams.get('token');
+
+if (token !== LIBRARY_TOKEN) {
+  return Astro.redirect('/');
+}
+
+export const prerender = false;
+---
+
+<BaseLayout title="Resource Library — BUILD3R" description="Access all BUILD3R resources and downloadable guides.">
+  <meta slot="head" name="robots" content="noindex, nofollow" />
+
+  <main class="mx-auto max-w-4xl px-6 py-20">
+    <div class="mb-12 text-center">
+      <p class="text-sm font-semibold uppercase tracking-[0.3em] text-brand-blue-600">Exclusive Access</p>
+      <h1 class="mt-4 text-4xl font-bold tracking-tight text-ink-900 sm:text-5xl">
+        Resource Library
+      </h1>
+      <p class="mt-4 text-lg text-ink-600">
+        All of our guides, scorecards, and playbooks in one place. Download anything you need.
+      </p>
+    </div>
+
+    <div class="grid gap-6">
+      {resources.map((resource) => (
+        <div class="rounded-xl2 border border-ink-200/60 bg-white/90 p-6 shadow-soft transition hover:shadow-md">
+          <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div class="flex-1">
+              <p class="text-xs font-semibold uppercase tracking-[0.25em] text-brand-blue-600">
+                {resource.serviceSlug.replace(/-/g, ' ').replace(/_/g, ' ')}
+              </p>
+              <h2 class="mt-1 text-lg font-semibold text-ink-900">{resource.title}</h2>
+              <p class="mt-1 text-sm text-ink-600">{resource.summary}</p>
+            </div>
+            <div class="flex-shrink-0">
+              <a
+                href={resource.downloadFile}
+                download
+                class="inline-flex items-center gap-2 rounded-xl2 bg-gradient-to-br from-brand-blue-600 via-brand-purple-600 to-brand-blue-800 px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:-translate-y-0.5 hover:opacity-95"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Download PDF
+              </a>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="mt-12 rounded-xl2 border border-brand-blue-100 bg-brand-blue-50/50 p-6 text-center">
+      <p class="text-sm text-ink-600">
+        Have questions about any of these resources?
+        <a href="/book-a-call" class="font-semibold text-brand-blue-600 underline hover:text-brand-blue-700">Book a call</a>
+        and we'll walk through them with you.
+      </p>
+    </div>
+  </main>
+</BaseLayout>
