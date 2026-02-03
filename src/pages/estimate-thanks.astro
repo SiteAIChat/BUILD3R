@@ -69,9 +69,12 @@ const ref = url.searchParams.get('ref') || '';
           <p class="mt-2 text-ink-600">Pick a time that works and we'll come prepared with your estimate details.</p>
         </div>
 
-        <div id="cal-embed" class="min-h-[500px]">
-          <!-- Cal.com inline embed -->
-        </div>
+        <iframe
+          title="Book a call"
+          src="https://cal.com/build3r/30min"
+          class="h-[600px] w-full rounded-xl"
+          allowfullscreen
+        ></iframe>
       </div>
     </section>
 
@@ -85,27 +88,4 @@ const ref = url.searchParams.get('ref') || '';
       </div>
     </section>
   </main>
-
-  <!-- Cal.com embed script -->
-  <script is:inline>
-    (function() {
-      const script = document.createElement('script');
-      script.src = 'https://app.cal.com/embed/embed.js';
-      script.async = true;
-      script.onload = function() {
-        Cal("init", {origin:"https://cal.com"});
-        Cal("inline", {
-          elementOrSelector: "#cal-embed",
-          calLink: "build3r/30min",
-          layout: "month_view"
-        });
-        Cal("ui", {
-          styles: { branding: { brandColor: "#2563eb" } },
-          hideEventTypeDetails: false,
-          layout: "month_view"
-        });
-      };
-      document.head.appendChild(script);
-    })();
-  </script>
 </BaseLayout>

@@ -51,6 +51,59 @@ export const POST: APIRoute = async ({ request, locals }) => {
     // Generate a simple reference ID
     const estimateId = `EST-${Date.now().toString(36).toUpperCase()}`;
 
+    // Add a note with full estimate details
+    if (contactId) {
+      const packageLabels: Record<string, string> = {
+        ai_jumpstart: 'AI Jumpstart',
+        automation: 'Automation Accelerator',
+        mvp: 'MVP Builder',
+        commerce: 'Commerce Modules',
+      };
+      const addonLabels: Record<string, string> = {
+        design_polish: 'Design polish',
+        multi_role_auth: 'Multi-role auth',
+        payments: 'Payments & billing',
+        training: 'Team training & docs',
+        integrations: 'Advanced integrations',
+      };
+      const addonList = Array.isArray(addons) && addons.length > 0
+        ? addons.map((a: string) => addonLabels[a] || a).join(', ')
+        : 'None';
+
+      const noteContent = [
+        `📊 Estimate Request — ${estimateId}`,
+        ``,
+        `Project type: ${packageLabels[projectType] || projectType}`,
+        `Complexity: ${complexity}`,
+        `Size: ${size}`,
+        `Speed: ${speed}`,
+        `Add-ons: ${addonList}`,
+        ``,
+        `Estimated range: ${estimateRange}`,
+        `Timeline: ${timeline}`,
+        ``,
+        `Submitted: ${new Date().toISOString()}`,
+      ].join('\n');
+
+      await fetch(`${GH_API_BASE}/notes`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Gh-Token': GH_TOKEN,
+          'Gh-Public-Key': GH_PUBLIC_KEY,
+        },
+        body: JSON.stringify({
+          data: {
+            object_id: contactId,
+            object_type: 'contact',
+            content: noteContent,
+            type: 'note',
+            context: 'user',
+          },
+        }),
+      });
+    }
+
     return new Response(JSON.stringify({ success: true, estimateId, contactId }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
