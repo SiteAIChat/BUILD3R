@@ -1,0 +1,366 @@
+---
+import MarketingLayout from '@/layouts/MarketingLayout.astro';
+import BookCallLink from '@/components/BookCallLink.astro';
+import CtaBar from '@/components/CtaBar.astro';
+import Section from '@/components/Section.astro';
+import { services } from '@/lib/content/services';
+
+const featuredWork = [
+  {
+    slug: "voltage",
+    client: "Voltage",
+    title: "From rented tools to owned IP",
+    description:
+      "We built an Amazon opportunity engine that replaced third party tools, launched to coaching cohorts, and is evolving into a paid product.",
+    bullets: [
+      "Real time signals and custom scoring",
+      "Eliminated multiple subscriptions; full data/roadmap control",
+      "Clear path to ARR via access tiers"
+    ],
+    hasCase: true
+  },
+  {
+    slug: "icon-meals",
+    client: "Icon Meals",
+    title: "The reporting backbone for kitchen ops",
+    description:
+      "We unified Shopify orders, ingredient planning, prep sheets, labeling, and delivery into one reporting system the team runs on daily.",
+    bullets: [
+      "Ingredient level planning and automated labeling",
+      "Operational visibility from prep → packaging → delivery",
+      "Pilot established value quickly; ongoing optimization"
+    ],
+    hasCase: true
+  },
+  {
+    slug: "web-piano-teacher",
+    client: "Web Piano Teacher",
+    title: "Modernization that lifted revenue",
+    description:
+      "We modernized the platform and introduced a $1 trial that increased trials and paid conversions—leading to immediate revenue growth.",
+    bullets: [
+      "Improved trial → paid performance (especially mid tier)",
+      "Roadmap for full platform modernization",
+      "Clear test and learn loops for offers and pricing"
+    ],
+    hasCase: true
+  },
+  {
+    slug: "tap-a-tech",
+    client: "Tap a Tech",
+    title: "Privacy-aware AI for field service",
+    description:
+      "We deployed privacy-aware AI with local and private models, giving field technicians instant access to knowledge while keeping sensitive data on-premise.",
+    bullets: [
+      "On-premise AI deployment with local models",
+      "Privacy-first knowledge access for field techs",
+      "Designed for low-connectivity field environments"
+    ],
+    hasCase: true
+  }
+];
+
+const clientResults = [
+  {
+    title: "Pilot-first delivery that shows value early",
+    metric: "2–4 weeks",
+    metricLabel: "to first pilot"
+  },
+  {
+    title: "From rented tools to owned IP and data control",
+    client: "Voltage",
+    metric: "Full ownership",
+    metricLabel: "of platform & data"
+  },
+  {
+    title: "Privacy-aware AI with local/private models when needed",
+    client: "Tap a Tech",
+    metric: "On-premise",
+    metricLabel: "AI deployment"
+  },
+  {
+    title: "Revenue lift from smart offer design and modernization",
+    client: "Web Piano Teacher",
+    metric: "30%+",
+    metricLabel: "conversion lift"
+  }
+];
+
+const valuePillars = [
+  {
+    title: "Senior-led from day one",
+    description:
+      "You work directly with the folks designing, building, and automating. No handoffs or junior staffing surprises."
+  },
+  {
+    title: "Productized clarity",
+    description:
+      "Fixed-scope, fixed-price packages map to where you are—pilot, automation, MVP, or commerce upgrade."
+  },
+  {
+    title: "Performance obsessed",
+    description:
+      "Cloudflare-first stack, Core Web Vitals benchmarks, and analytics instrumentation baked into every engagement."
+  }
+];
+
+const processSteps = [
+  {
+    title: "Discover",
+    description: "Align on outcomes, success metrics, and constraints during a focused strategy sprint."
+  },
+  {
+    title: "Design",
+    description: "Shape flows, architecture, and data models that balance velocity with reliability."
+  },
+  {
+    title: "Build",
+    description: "Ship in weekly increments, testing early with real users or operators."
+  },
+  {
+    title: "Launch & Care",
+    description: "Deploy to Cloudflare, instrument analytics, and transition into Care plans for ongoing improvements."
+  }
+];
+
+const featuredServices = services.slice(0, 3);
+---
+
+<MarketingLayout title="BUILD3R — AI-Powered Software for Forward-Thinking Business Owners" description="Productized services that help you test, launch, and scale AI-driven experiences—without heavyweight platforms or runaway budgets.">
+  <div class="space-y-24 pb-24">
+    <section class="relative -mt-[96px] overflow-hidden bg-ink-900 pt-[96px]">
+      <!-- Dark aurora radial glows -->
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-20 hero-aurora-dark"></div>
+      <!-- Deep gradient base -->
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-[#0a0e1a] via-ink-900 to-[#1a0a2e]"></div>
+      <!-- Primary animated blob -->
+      <div aria-hidden="true" class="pointer-events-none absolute top-[-10%] right-[-10%] h-[32rem] w-[32rem] bg-gradient-to-br from-brand-purple-600/40 via-brand-blue-600/30 to-brand-purple-800/20 hero-blob"></div>
+      <!-- Secondary animated blob -->
+      <div aria-hidden="true" class="pointer-events-none absolute -bottom-40 left-[-15%] h-[28rem] w-[28rem] bg-gradient-to-br from-[#ec4899]/25 via-brand-purple-500/20 to-brand-blue-600/15 hero-blob-alt"></div>
+      <!-- Tertiary smaller blob -->
+      <div aria-hidden="true" class="pointer-events-none absolute top-[20%] left-[30%] h-[24rem] w-[24rem] bg-gradient-to-br from-brand-blue-500/20 via-brand-purple-400/15 to-transparent hero-blob" style="animation-delay: -6s;"></div>
+      <!-- Flowing wave SVG decoration — top -->
+      <svg aria-hidden="true" class="pointer-events-none absolute top-0 left-0 w-full opacity-[0.08] hero-wave" viewBox="0 0 1440 320" preserveAspectRatio="none" style="height: 200px;">
+        <path fill="url(#wave-grad-1)" d="M0,160L48,176C96,192,192,224,288,218.7C384,213,480,171,576,165.3C672,160,768,192,864,197.3C960,203,1056,181,1152,165.3C1248,149,1344,139,1392,133.3L1440,128L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
+        <defs>
+          <linearGradient id="wave-grad-1" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#7c3aed"></stop>
+            <stop offset="50%" stop-color="#3b82f6"></stop>
+            <stop offset="100%" stop-color="#8b5cf6"></stop>
+          </linearGradient>
+        </defs>
+      </svg>
+      <!-- Flowing wave SVG decoration — bottom -->
+      <svg aria-hidden="true" class="pointer-events-none absolute bottom-0 left-0 w-full opacity-[0.06] hero-wave" viewBox="0 0 1440 320" preserveAspectRatio="none" style="height: 160px; animation-delay: -4s;">
+        <path fill="url(#wave-grad-2)" d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,213.3C672,224,768,224,864,208C960,192,1056,160,1152,154.7C1248,149,1344,171,1392,181.3L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+        <defs>
+          <linearGradient id="wave-grad-2" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#ec4899"></stop>
+            <stop offset="50%" stop-color="#7c3aed"></stop>
+            <stop offset="100%" stop-color="#3b82f6"></stop>
+          </linearGradient>
+        </defs>
+      </svg>
+      <!-- Dot pattern -->
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 pattern-dots" style="--pattern-color: rgba(148, 163, 184, 0.06);"></div>
+      <!-- Noise texture -->
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 pattern-noise opacity-30"></div>
+      <div class="relative mx-auto flex w-full max-w-6xl flex-col items-center gap-10 px-6 py-28 text-center md:px-8">
+        <h1 class="text-4xl font-semibold tracking-tight text-white md:text-5xl lg:text-6xl">
+          We build AI-powered software for forward-thinking business owners.
+        </h1>
+        <p class="max-w-2xl text-lg leading-relaxed text-slate-300">
+          Productized services that help you test, launch, and scale AI-driven experiences—without heavyweight platforms or runaway budgets.
+        </p>
+        <div class="flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <a class="inline-flex items-center gap-2 rounded-xl2 bg-gradient-to-br from-brand-blue-600 via-brand-purple-600 to-brand-blue-800 px-6 py-3 font-semibold text-white shadow-soft transition hover:-translate-y-0.5 hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue-300 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-900" href="/pricing">
+            Explore Pricing & Estimator
+          </a>
+          <BookCallLink source="hero" class="inline-flex items-center gap-2 rounded-xl2 border border-white/20 bg-white/5 px-6 py-3 font-semibold text-white/90 backdrop-blur transition hover:-translate-y-0.5 hover:border-white/40 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40">
+            Schedule a Call
+          </BookCallLink>
+        </div>
+        <div class="flex flex-wrap items-center justify-center gap-6 text-xs font-medium uppercase tracking-[0.35em] text-slate-500">
+          Trusted by builders in Austin, Denver, and SF
+        </div>
+      </div>
+    </section>
+
+    <!-- Gradient divider -->
+    <div aria-hidden="true" class="gradient-divider mx-auto max-w-5xl"></div>
+
+    <Section
+      class="!pt-0 section-noise bg-gradient-to-br from-ink-50 via-white to-brand-blue-50/30"
+      eyebrow="Results"
+      title="Real outcomes for real businesses"
+      description="We measure success by your metrics—speed to market, ownership, privacy, and revenue."
+    >
+      <!-- Decorative shapes -->
+      <div aria-hidden="true" class="deco-shape top-12 right-16 h-16 w-16 rotate-12 rounded-full border-2 border-brand-blue-400 animate-float"></div>
+      <div aria-hidden="true" class="deco-shape bottom-20 left-10 h-10 w-10 rotate-45 border-2 border-brand-purple-400 animate-float-delayed"></div>
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {clientResults.map((result, index) => (
+          <article class={`group animate-fade-in-up animate-delay-${index + 1} relative flex h-full flex-col overflow-hidden rounded-xl2 border border-ink-200/60 bg-white/80 p-6 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-brand-blue-200 hover:shadow-xl`}>
+            <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-brand-blue-200 via-white to-brand-green-100 opacity-0 transition group-hover:opacity-20"></div>
+            <div class="flex-1">
+              <h3 class="text-lg font-semibold leading-snug text-ink-900 group-hover:text-brand-blue-700">
+                {result.title}
+              </h3>
+              {result.client && (
+                <p class="mt-2 text-xs font-medium uppercase tracking-[0.3em] text-brand-blue-500">
+                  {result.client}
+                </p>
+              )}
+            </div>
+            <div class="mt-6 rounded-lg bg-gradient-to-br from-brand-blue-50 to-brand-green-50 px-4 py-3">
+              <p class="text-2xl font-bold text-brand-blue-700">{result.metric}</p>
+              <p class="text-xs font-medium uppercase tracking-wide text-ink-500">{result.metricLabel}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </Section>
+
+    <!-- Gradient divider -->
+    <div aria-hidden="true" class="gradient-divider mx-auto max-w-5xl"></div>
+
+    <Section
+      eyebrow="Why Build3r"
+      title="Lean, senior teams that ship measurable outcomes"
+      description="Seven-to-twelve week engagements focused on ROI, not retainer bloat. We align around your internal metrics, not vanity dashboards."
+      class="pattern-dots bg-gradient-to-br from-brand-blue-50/40 via-white to-brand-purple-50/30"
+      style="--pattern-color: rgba(139, 92, 246, 0.04);"
+    >
+      <!-- Decorative shapes -->
+      <div aria-hidden="true" class="deco-shape top-16 right-24 h-12 w-12 rotate-45 border-2 border-brand-purple-300 animate-float-slow"></div>
+      <div aria-hidden="true" class="deco-shape bottom-16 left-20 h-8 w-8 rounded-full border-2 border-brand-blue-300 animate-float"></div>
+      <div aria-hidden="true" class="deco-shape top-1/2 right-12 h-6 w-6 rotate-12 rounded-sm border-2 border-brand-green-300 animate-float-delayed"></div>
+      <div class="grid gap-8 md:grid-cols-3">
+        {valuePillars.map((pillar, index) => (
+          <article class={`group animate-fade-in-up animate-delay-${index + 1} relative h-full overflow-hidden rounded-xl2 border border-ink-200/60 bg-white/80 p-8 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-brand-blue-200 hover:shadow-xl`}>
+            <div aria-hidden="true" class={`pointer-events-none absolute inset-0 -z-10 opacity-0 transition group-hover:opacity-20 ${index % 2 === 0 ? "bg-gradient-to-br from-brand-blue-200 via-white to-brand-green-100" : "bg-gradient-to-br from-brand-purple-200 via-white to-brand-blue-100"}`}></div>
+            <div class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-brand-blue-100 to-brand-purple-100 text-brand-blue-700">
+              <span aria-hidden="true" class="text-base font-bold">{pillar.title[0]}</span>
+            </div>
+            <h3 class="mt-6 text-xl font-semibold text-ink-900 group-hover:text-brand-blue-700">{pillar.title}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-ink-600">{pillar.description}</p>
+          </article>
+        ))}
+      </div>
+    </Section>
+
+    <!-- Gradient divider -->
+    <div aria-hidden="true" class="gradient-divider mx-auto max-w-5xl"></div>
+
+    <Section
+      class="section-noise bg-white"
+      eyebrow="Productized Services"
+      title="Packages that meet you where you are"
+      description="Pick the engagement that matches your stage. Need a custom blend? We'll tailor the scope while keeping pricing transparent."
+    >
+      <div class="grid gap-8 md:grid-cols-3">
+        {featuredServices.map((service, index) => (
+          <article class={`group animate-fade-in-up animate-delay-${index + 1} relative flex h-full flex-col justify-between overflow-hidden rounded-xl2 border border-ink-200/70 bg-white/90 p-8 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-brand-blue-200 hover:shadow-xl`}>
+            <div class="space-y-4">
+              <p class="text-xs font-semibold uppercase tracking-[0.4em] text-brand-blue-500">{service.shortName}</p>
+              <h3 class="text-xl font-semibold text-ink-900 group-hover:text-brand-blue-700">{service.name}</h3>
+              <p class="text-sm leading-relaxed text-ink-600">{service.summary}</p>
+            </div>
+            <div class="mt-6 flex items-center justify-between text-sm text-ink-500">
+              <span>{service.timelineWeeks}</span>
+              <span>{service.representativePrice}</span>
+            </div>
+            <a href={`/services/${service.slug}`} class="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-brand-blue-600 transition hover:text-brand-blue-700">
+              View service details →
+            </a>
+            <div aria-hidden="true" class={`pointer-events-none absolute inset-0 -z-10 opacity-0 transition group-hover:opacity-20 ${index % 2 === 0 ? "bg-gradient-to-br from-brand-blue-200 via-white to-brand-green-100" : "bg-gradient-to-br from-brand-purple-200 via-white to-brand-blue-100"}`}></div>
+          </article>
+        ))}
+      </div>
+    </Section>
+
+    <!-- Gradient divider -->
+    <div aria-hidden="true" class="gradient-divider mx-auto max-w-5xl"></div>
+
+    <Section
+      class="dark-section-gradient pattern-dots text-slate-200 overflow-hidden"
+      eyebrow="Proof"
+      eyebrowClassName="text-brand-green-400"
+      title="Work we ship"
+      titleClassName="text-white"
+      description="Here are a few recent engagements. Each project includes strategy, delivery, and a handoff playbook so teams can sustain momentum."
+      descriptionClassName="text-slate-300"
+      style="--pattern-color: rgba(148, 163, 184, 0.08);"
+    >
+      <!-- Floating geometric decorations -->
+      <div aria-hidden="true" class="deco-shape top-20 right-16 h-20 w-20 rotate-45 border-2 border-brand-purple-500 opacity-[0.06] animate-float-slow"></div>
+      <div aria-hidden="true" class="deco-shape bottom-24 left-12 h-14 w-14 rounded-full border-2 border-brand-green-400 opacity-[0.06] animate-float"></div>
+      <div aria-hidden="true" class="deco-shape top-1/3 left-8 h-10 w-10 rotate-12 border-2 border-brand-blue-400 opacity-[0.05] animate-float-delayed"></div>
+      <div aria-hidden="true" class="deco-shape bottom-1/4 right-20 h-8 w-8 rounded-sm rotate-45 border-2 border-brand-purple-300 opacity-[0.05] animate-float-slow"></div>
+      <!-- Hexagon decoration -->
+      <svg aria-hidden="true" class="deco-shape top-16 left-1/2 h-24 w-24 opacity-[0.04] animate-float-delayed" viewBox="0 0 100 100">
+        <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" fill="none" stroke="#8b5cf6" stroke-width="2"></polygon>
+      </svg>
+      <svg aria-hidden="true" class="deco-shape bottom-16 right-1/4 h-16 w-16 opacity-[0.04] animate-float" viewBox="0 0 100 100">
+        <polygon points="50,10 90,30 90,70 50,90 10,70 10,30" fill="none" stroke="#34d399" stroke-width="2"></polygon>
+      </svg>
+      <div class="grid gap-8 md:grid-cols-2">
+        {featuredWork.map((item, index) => (
+          <article class={`animate-fade-in-up animate-delay-${(index % 4) + 1} flex h-full flex-col rounded-xl2 border border-white/10 bg-white/5 p-8 text-slate-200 shadow-soft backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-white/20`}>
+            <p class="text-xs font-semibold uppercase tracking-[0.35em] text-brand-green-400">{item.client}</p>
+            <h3 class="mt-4 text-lg font-semibold text-white">{item.title}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-slate-300">{item.description}</p>
+            {item.bullets.length > 0 && (
+              <ul class="mt-6 space-y-3 text-sm text-slate-200">
+                {item.bullets.map((bullet) => (
+                  <li class="flex items-start gap-3">
+                    <div class="mt-1.5 inline-flex h-2 w-2 shrink-0 rounded-full bg-gradient-to-br from-brand-green-400 to-brand-green-600"></div>
+                    <span>{bullet}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {item.hasCase && (
+              <a href={`/work/${item.slug}`} class="mt-auto inline-flex items-center gap-2 pt-6 text-sm font-semibold text-brand-green-300 transition hover:text-brand-green-200">
+                Read the case →
+              </a>
+            )}
+          </article>
+        ))}
+      </div>
+    </Section>
+
+    <!-- Gradient divider -->
+    <div aria-hidden="true" class="gradient-divider mx-auto max-w-5xl"></div>
+
+    <Section
+      class="bg-gradient-to-br from-ink-50 via-white to-brand-green-50/20"
+      eyebrow="Process"
+      title="A simple, transparent journey"
+      description="From kickoff to launch, you always know what's in-flight and what's next."
+    >
+      <div class="h-0.5 w-24 bg-gradient-to-r from-brand-green-400 to-brand-blue-500" aria-hidden="true"></div>
+      <div class="grid gap-8 md:grid-cols-4">
+        {processSteps.map((step, index) => (
+          <article class={`group animate-fade-in-up animate-delay-${index + 1} relative overflow-hidden rounded-xl2 border border-ink-200/60 bg-white p-6 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-brand-blue-200 hover:shadow-xl`}>
+            <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-brand-blue-200 via-white to-brand-green-100 opacity-0 transition group-hover:opacity-20"></div>
+            <div class="mb-4 inline-flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-brand-blue-500 to-brand-purple-500 text-xs font-bold text-white">
+              {index + 1}
+            </div>
+            <h3 class="text-lg font-semibold text-ink-900 group-hover:text-brand-blue-700">{step.title}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-ink-600">{step.description}</p>
+          </article>
+        ))}
+      </div>
+    </Section>
+
+    <CtaBar
+      title="Ready to try the estimator?"
+      description="Answer a few questions to see pricing ranges, timelines, and recommended packages tailored to your project."
+      primaryHref="/pricing"
+      primaryLabel="Open the Estimator"
+      secondaryHref="/book-a-call"
+      secondaryLabel="Schedule a Call"
+    />
+  </div>
+</MarketingLayout>

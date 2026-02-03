@@ -1,0 +1,91 @@
+---
+import MarketingLayout from '@/layouts/MarketingLayout.astro';
+import CtaBar from '@/components/CtaBar.astro';
+import ResourceDownloadForm from '@/components/ResourceDownloadForm.astro';
+import Section from '@/components/Section.astro';
+import { resources } from '@/lib/content/resources';
+import { getServiceBySlug } from '@/lib/content/services';
+
+export function getStaticPaths() {
+  return resources.map((item) => ({
+    params: { slug: item.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const post = resources.find((item) => item.slug === slug)!;
+const relatedService = getServiceBySlug(post.serviceSlug);
+---
+
+<MarketingLayout title={`${post.title} | BUILD3R Resources`} description={post.summary}>
+  <div class="space-y-24 pb-24">
+    <section class="relative isolate overflow-hidden">
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-brand-blue-50 via-white to-brand-purple-100"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 pattern-noise opacity-30"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 pattern-dots" style="--pattern-color: rgba(67, 56, 202, 0.12);"></div>
+      <div class="relative mx-auto w-full max-w-3xl px-6 pb-24 pt-28 md:px-8 md:pt-36">
+        <p class="inline-flex items-center gap-2 rounded-full border border-brand-purple-200/60 bg-white/70 px-4 py-2 text-xs font-semibold uppercase tracking-[0.5em] text-brand-purple-600 shadow-soft">
+          {relatedService?.shortName ?? "Guide"}
+        </p>
+        <h1 class="mt-6 text-4xl font-semibold tracking-tight text-ink-900 md:text-5xl">{post.title}</h1>
+        <p class="mt-4 text-lg leading-relaxed text-ink-600">{post.summary}</p>
+        <p class="mt-4 text-sm uppercase tracking-[0.35em] text-ink-400">{post.readingTime}</p>
+      </div>
+    </section>
+
+    <Section class="bg-white" title="Key takeaways">
+      <ol class="space-y-4 text-sm text-ink-600">
+        {post.takeaways.map((item) => (
+          <li class="rounded-xl2 border border-ink-200/60 bg-white/90 p-5 shadow-soft">{item}</li>
+        ))}
+      </ol>
+    </Section>
+
+    {post.body && post.body.length > 0 && (
+      <section class="relative isolate bg-white py-20">
+        <div class="mx-auto w-full max-w-6xl px-6 md:px-8">
+          <div class="space-y-12">
+            {post.body.map((section) => (
+              <div class="max-w-3xl">
+                <h2 class="text-2xl font-semibold tracking-tight text-ink-900 md:text-3xl">{section.heading}</h2>
+                <div class="mt-4 space-y-4">
+                  {section.paragraphs.map((paragraph) => (
+                    <p class="text-base leading-relaxed text-ink-600">{paragraph}</p>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <Section class="bg-white" title={post.downloadFile ? "Get the resource" : "Next step"}>
+      {post.downloadFile && post.downloadLabel ? (
+        <ResourceDownloadForm
+          downloadFile={post.downloadFile}
+          downloadLabel={post.downloadLabel}
+          resourceTitle={post.title}
+        />
+      ) : (
+        <div class="rounded-xl2 border border-ink-200/60 bg-white/90 p-6 shadow-soft">
+          <p class="text-sm leading-relaxed text-ink-600">{post.action}</p>
+          {relatedService && (
+            <a href={`/services/${relatedService.slug}`} class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-brand-blue-600 transition hover:text-brand-blue-700">
+              Explore {relatedService.name} →
+            </a>
+          )}
+        </div>
+      )}
+    </Section>
+
+    <CtaBar
+      title="Need help executing this play?"
+      description="Book a call and we'll walk through your goals, constraints, and the best package for your team."
+      primaryHref="/book-a-call"
+      primaryLabel="Book a call"
+      secondaryHref="/pricing"
+      secondaryLabel="Open the estimator"
+    />
+  </div>
+</MarketingLayout>

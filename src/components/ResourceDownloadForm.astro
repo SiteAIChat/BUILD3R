@@ -1,0 +1,113 @@
+---
+interface Props {
+  downloadFile: string;
+  downloadLabel: string;
+  resourceTitle: string;
+}
+
+const { downloadFile, downloadLabel, resourceTitle } = Astro.props;
+const formId = `dl-form-${resourceTitle.replace(/\s+/g, '-').toLowerCase()}`;
+---
+
+<div id={formId} data-download-file={downloadFile} data-download-label={downloadLabel} data-resource-title={resourceTitle}>
+  <form class="rounded-xl2 border border-ink-200/60 bg-white/90 p-8 shadow-soft" data-resource-form>
+    <h3 class="text-xl font-semibold text-ink-900">{downloadLabel.replace(" (PDF)", "")}</h3>
+    <p class="mt-2 text-sm text-ink-600">
+      Enter your name and email to download the free resource.
+    </p>
+    <div class="mt-6 grid gap-4 sm:grid-cols-3">
+      <div>
+        <label for="dl-first-name" class="block text-xs font-medium uppercase tracking-[0.3em] text-ink-400">
+          First Name
+        </label>
+        <input
+          id="dl-first-name"
+          type="text"
+          required
+          name="firstName"
+          placeholder="First name"
+          class="mt-1 w-full rounded-lg border border-ink-200 bg-white px-4 py-2.5 text-sm text-ink-900 placeholder:text-ink-400 focus:border-brand-blue-400 focus:outline-none focus:ring-2 focus:ring-brand-blue-200"
+        />
+      </div>
+      <div>
+        <label for="dl-last-name" class="block text-xs font-medium uppercase tracking-[0.3em] text-ink-400">
+          Last Name
+        </label>
+        <input
+          id="dl-last-name"
+          type="text"
+          required
+          name="lastName"
+          placeholder="Last name"
+          class="mt-1 w-full rounded-lg border border-ink-200 bg-white px-4 py-2.5 text-sm text-ink-900 placeholder:text-ink-400 focus:border-brand-blue-400 focus:outline-none focus:ring-2 focus:ring-brand-blue-200"
+        />
+      </div>
+      <div>
+        <label for="dl-email" class="block text-xs font-medium uppercase tracking-[0.3em] text-ink-400">
+          Email
+        </label>
+        <input
+          id="dl-email"
+          type="email"
+          required
+          name="email"
+          placeholder="you@company.com"
+          class="mt-1 w-full rounded-lg border border-ink-200 bg-white px-4 py-2.5 text-sm text-ink-900 placeholder:text-ink-400 focus:border-brand-blue-400 focus:outline-none focus:ring-2 focus:ring-brand-blue-200"
+        />
+      </div>
+    </div>
+    <button
+      type="submit"
+      class="mt-6 inline-flex items-center gap-2 rounded-xl2 bg-gradient-to-br from-brand-blue-600 via-brand-purple-600 to-brand-blue-800 px-6 py-3 font-semibold text-white shadow-soft transition hover:-translate-y-0.5 hover:opacity-95 disabled:opacity-50 disabled:hover:translate-y-0"
+    >
+      {downloadLabel}
+    </button>
+  </form>
+</div>
+
+<script>
+  const SUBMIT_URL = "https://n8n.build3r.io/webhook/resource-download";
+
+  document.querySelectorAll('[data-resource-form]').forEach((form) => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formEl = e.target as HTMLFormElement;
+      const container = formEl.closest('[data-download-file]') as HTMLElement;
+      const downloadFile = container?.dataset.downloadFile || '';
+      const resourceTitle = container?.dataset.resourceTitle || '';
+      const btn = formEl.querySelector('button[type="submit"]') as HTMLButtonElement;
+
+      const firstName = (formEl.querySelector('[name="firstName"]') as HTMLInputElement).value.trim();
+      const lastName = (formEl.querySelector('[name="lastName"]') as HTMLInputElement).value.trim();
+      const email = (formEl.querySelector('[name="email"]') as HTMLInputElement).value;
+
+      btn.disabled = true;
+      btn.textContent = 'Submitting...';
+
+      try {
+        await fetch(SUBMIT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ firstName, lastName, email, resource: resourceTitle, downloadFile }),
+        });
+      } catch {}
+
+      container.innerHTML = `
+        <div class="rounded-xl2 border border-brand-green-200 bg-brand-green-50/50 p-8 text-center shadow-soft">
+          <p class="text-lg font-semibold text-brand-green-700">Download started!</p>
+          <p class="mt-2 text-sm text-ink-600">
+            If the download didn&apos;t start automatically,
+            <a href="${downloadFile}" download class="font-semibold text-brand-blue-600 underline hover:text-brand-blue-700">click here</a>.
+          </p>
+        </div>
+      `;
+
+      const link = document.createElement("a");
+      link.href = downloadFile;
+      link.download = downloadFile.split("/").pop() || "download.pdf";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  });
+</script>

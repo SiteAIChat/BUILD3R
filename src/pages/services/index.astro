@@ -1,0 +1,71 @@
+---
+import MarketingLayout from '@/layouts/MarketingLayout.astro';
+import CtaBar from '@/components/CtaBar.astro';
+import Section from '@/components/Section.astro';
+import { services } from '@/lib/content/services';
+---
+
+<MarketingLayout title="Services | BUILD3R" description="Productized engagements for every stage.">
+  <div class="space-y-24 pb-24">
+    <section class="relative -mt-[96px] overflow-hidden bg-ink-900 pt-[96px]">
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-[#0a0e1a] via-ink-900 to-[#0a1a2e]"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute top-[-10%] right-[-10%] h-[32rem] w-[32rem] bg-gradient-to-br from-brand-blue-600/35 via-brand-purple-600/25 to-brand-blue-800/15 hero-blob"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute -bottom-40 left-[-15%] h-[28rem] w-[28rem] bg-gradient-to-br from-brand-green-500/20 via-brand-blue-500/15 to-transparent hero-blob-alt"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 pattern-dots" style="--pattern-color: rgba(148, 163, 184, 0.06);"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 pattern-noise opacity-30"></div>
+      <div class="relative mx-auto flex w-full max-w-4xl flex-col gap-6 px-6 pb-20 pt-24 text-center md:px-8">
+        <p class="mx-auto inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.5em] text-brand-blue-300 backdrop-blur">
+          Services
+        </p>
+        <h1 class="text-4xl font-semibold tracking-tight text-white md:text-5xl">
+          Productized engagements for every stage
+        </h1>
+        <p class="text-lg leading-relaxed text-slate-300">
+          Each package blends senior strategy, build execution, and knowledge transfer. Start with the one that matches your current objective.
+        </p>
+      </div>
+    </section>
+
+    <Section
+      class="bg-white"
+      eyebrow="Our playbooks"
+      title="Choose the engagement that aligns with your goals"
+      description="Every package includes strategy, build execution, analytics instrumentation, and a thorough handoff."
+    >
+      <div class="grid gap-10 md:grid-cols-2">
+        {services.map((service, index) => (
+          <article class="group relative flex h-full flex-col justify-between overflow-hidden rounded-xl2 border border-ink-200/70 bg-white/90 p-8 shadow-soft transition hover:-translate-y-1 hover:border-brand-blue-200 hover:shadow-xl">
+            <div class="space-y-4">
+              <p class="text-xs font-semibold uppercase tracking-[0.4em] text-brand-blue-500">{service.shortName}</p>
+              <h2 class="text-2xl font-semibold text-ink-900 group-hover:text-brand-blue-700">{service.name}</h2>
+              <p class="text-sm leading-relaxed text-ink-600">{service.summary}</p>
+            </div>
+            <dl class="mt-8 grid grid-cols-2 gap-4 text-sm text-ink-500">
+              <div>
+                <dt class="text-xs uppercase tracking-[0.3em] text-ink-400">Timeline</dt>
+                <dd class="text-base font-semibold text-ink-900">{service.timelineWeeks}</dd>
+              </div>
+              <div>
+                <dt class="text-xs uppercase tracking-[0.3em] text-ink-400">Representative price</dt>
+                <dd class="text-base font-semibold text-ink-900">{service.representativePrice}</dd>
+              </div>
+            </dl>
+            <a href={`/services/${service.slug}`} class="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-brand-blue-600 transition hover:text-brand-blue-700">
+              Explore the full playbook →
+            </a>
+            <div aria-hidden="true" class={`pointer-events-none absolute inset-0 -z-10 opacity-0 transition group-hover:opacity-100 ${index % 2 === 0 ? "bg-gradient-to-br from-brand-blue-100/40 via-white to-brand-green-100/30" : "bg-gradient-to-br from-brand-purple-100/40 via-white to-brand-blue-100/30"}`}></div>
+          </article>
+        ))}
+      </div>
+    </Section>
+
+    <CtaBar
+      title="Not sure where to start?"
+      description="Book a 15-minute call and we'll map the right engagement based on your goals and constraints."
+      primaryHref="/book-a-call"
+      primaryLabel="Book a call"
+      secondaryHref="/pricing"
+      secondaryLabel="Try the estimator"
+    />
+  </div>
+</MarketingLayout>

@@ -1,0 +1,83 @@
+---
+import MarketingLayout from '@/layouts/MarketingLayout.astro';
+import Section from '@/components/Section.astro';
+
+const values = [
+  {
+    title: "Stay small, move fast",
+    description: "A lean team of senior builders can outpace large agencies. You always work with the people designing and coding."
+  },
+  {
+    title: "Outcomes over output",
+    description: "We anchor on the metrics that matter—hours saved, conversions won, revenue unlocked—not vanity dashboards."
+  },
+  {
+    title: "Teach as we build",
+    description: "Every engagement includes docs, looms, and working sessions so your team can maintain momentum after launch."
+  },
+  {
+    title: "Bias for shipping",
+    description: "We scope iteratively, test early, and deploy often. Progress is measured in shipped value, not slide decks."
+  }
+];
+---
+
+<MarketingLayout title="About | BUILD3R" description="Small team. Senior talent. Build-ready.">
+  <div class="space-y-24 pb-24">
+    <section class="relative -mt-[96px] overflow-hidden bg-ink-900 pt-[96px]">
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-[#0a0e1a] via-ink-900 to-[#0a1a14]"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute top-[-5%] right-[-15%] h-[30rem] w-[30rem] bg-gradient-to-br from-brand-blue-600/30 via-brand-green-500/20 to-transparent hero-blob"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute -bottom-36 left-[-10%] h-[26rem] w-[26rem] bg-gradient-to-br from-brand-purple-600/20 via-brand-blue-500/15 to-transparent hero-blob-alt"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 pattern-dots" style="--pattern-color: rgba(148, 163, 184, 0.06);"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 pattern-noise opacity-30"></div>
+      <div class="relative mx-auto w-full max-w-4xl px-6 pb-20 pt-24 md:px-8">
+        <p class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.5em] text-brand-blue-300 backdrop-blur">
+          About
+        </p>
+        <h1 class="mt-6 text-4xl font-semibold tracking-tight text-white md:text-5xl">
+          Small team. Senior talent. Build-ready.
+        </h1>
+        <p class="mt-4 text-lg leading-relaxed text-slate-300">
+          Build3r is led by Dustin Randle, a product-focused engineer who has spent the last decade shipping AI-assisted tools, internal platforms, and revenue-driving automations for founder-led businesses. We combine product strategy, design, and engineering into tight feedback loops so you can see value every week.
+        </p>
+      </div>
+    </section>
+
+    <Section
+      class="bg-white"
+      eyebrow="Mission"
+      title="Why we exist"
+      description="Help small and growing businesses unlock AI-powered leverage without sacrificing pragmatism, performance, or ownership. Every engagement should leave your team more capable than before we started."
+    />
+
+    <Section class="bg-white" eyebrow="Values" title="Principles that guide every engagement">
+      <div class="grid gap-6 md:grid-cols-2">
+        {values.map((value, index) => (
+          <article class="group relative rounded-xl2 border border-ink-200/60 bg-white/90 p-6 shadow-soft transition hover:-translate-y-1 hover:border-brand-blue-200 hover:shadow-xl">
+            <div class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-brand-blue-100 text-brand-blue-700">
+              <span class="text-base font-semibold">{index + 1}</span>
+            </div>
+            <h3 class="mt-4 text-lg font-semibold text-ink-900 group-hover:text-brand-blue-700">{value.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-ink-600">{value.description}</p>
+          </article>
+        ))}
+      </div>
+    </Section>
+
+    <Section
+      class="pattern-dots bg-ink-900 text-slate-200"
+      title="Why small teams win"
+      titleClassName="text-white"
+      descriptionClassName="text-slate-300"
+      style="--pattern-color: rgba(148, 163, 184, 0.12);"
+      description="High-trust, senior builders move quickly without sacrificing quality."
+    >
+      <ul class="space-y-4 text-sm text-slate-200">
+        <li class="rounded-xl2 border border-white/10 bg-white/10 p-4 shadow-soft backdrop-blur">Decisions happen in hours, not weeks.</li>
+        <li class="rounded-xl2 border border-white/10 bg-white/10 p-4 shadow-soft backdrop-blur">You work with the builders actually shipping the work.</li>
+        <li class="rounded-xl2 border border-white/10 bg-white/10 p-4 shadow-soft backdrop-blur">Transparency into prioritization, effort, and tradeoffs.</li>
+        <li class="rounded-xl2 border border-white/10 bg-white/10 p-4 shadow-soft backdrop-blur">Ability to scale up or down as we learn.</li>
+      </ul>
+    </Section>
+  </div>
+</MarketingLayout>

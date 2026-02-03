@@ -1,0 +1,57 @@
+---
+import JsonLd from '@/components/JsonLd.astro';
+import '@/styles/global.css';
+import '@/styles/patterns.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const siteName = "BUILD3R";
+const defaultDescription = "AI-powered software, automation, and productized services tailored for small and growing businesses.";
+
+const { title, description = defaultDescription } = Astro.props;
+
+const fullTitle = title ? `${title} | ${siteName}` : `${siteName} | AI-Powered Software for Small Business`;
+
+const localBusinessLd = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  name: siteName,
+  url: "https://build3r.io",
+  description: defaultDescription,
+  email: "hello@build3r.io",
+  areaServed: ["United States"],
+  serviceType: ["AI Jumpstart", "Automation Accelerator", "MVP Builder", "Commerce Integrations"],
+  sameAs: ["https://build3r.io"],
+  founder: {
+    "@type": "Person",
+    name: "Dustin Randle"
+  }
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="application-name" content={siteName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content="https://build3r.io" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <script src="https://siteai-backend.paragon-it-solutions.workers.dev/overlay/siteai-overlay.js"></script>
+  </head>
+  <body class="bg-ink-50 text-ink-900 antialiased">
+    <JsonLd data={localBusinessLd} />
+    <slot />
+  </body>
+</html>

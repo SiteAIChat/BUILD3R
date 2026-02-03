@@ -1,0 +1,92 @@
+---
+const footerLinks = [
+  {
+    title: "Company",
+    links: [
+      { href: "/about", label: "About" },
+      { href: "/work", label: "Work" },
+      { href: "/resources", label: "Resources" }
+    ]
+  },
+  {
+    title: "Services",
+    links: [
+      { href: "/services/ai-jumpstart", label: "AI Jumpstart" },
+      { href: "/services/automation", label: "Automation Accelerator" },
+      { href: "/services/mvp", label: "MVP Builder" },
+      { href: "/services/commerce", label: "Commerce Modules" }
+    ]
+  },
+  {
+    title: "Get in touch",
+    links: [
+      { href: "mailto:hello@build3r.io", label: "hello@build3r.io" },
+      { href: "/book-a-call", label: "Book a Call" }
+    ]
+  },
+  {
+    title: "Policies",
+    links: [
+      { href: "/privacy", label: "Privacy" },
+      { href: "/terms", label: "Terms" },
+      { href: "/accessibility", label: "Accessibility" }
+    ]
+  }
+];
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="relative border-t border-white/10 bg-ink-900 text-slate-300">
+  <div aria-hidden="true" class="pointer-events-none absolute inset-0 pattern-noise opacity-30" />
+  <div class="relative mx-auto flex w-full max-w-6xl flex-col gap-10 px-6 py-16 md:flex-row md:items-start md:justify-between">
+    <div class="max-w-sm space-y-4">
+      <img
+        src="/branding/logo-light.png"
+        alt="BUILD3R"
+        width="240"
+        height="72"
+        class="h-10 w-auto max-w-full sm:h-12 md:h-16"
+        loading="lazy"
+      />
+      <p class="text-sm leading-relaxed text-slate-300">
+        AI-powered software, automation, and productized services for small and growing businesses.
+      </p>
+    </div>
+    <div class="grid flex-1 grid-cols-2 gap-8 md:grid-cols-4">
+      {footerLinks.map((section) => (
+        <div class="space-y-3">
+          <h4 class="text-sm font-semibold uppercase tracking-[0.3em] text-white/70">
+            {section.title}
+          </h4>
+          <ul class="space-y-2 text-sm text-slate-300">
+            {section.links.map((item) => (
+              <li>
+                {item.href.startsWith("/") ? (
+                  <a
+                    class="transition hover:text-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue-400"
+                    href={item.href}
+                  >
+                    {item.label}
+                  </a>
+                ) : (
+                  <a
+                    class="transition hover:text-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue-400"
+                    href={item.href}
+                  >
+                    {item.label}
+                  </a>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </div>
+  <div class="relative border-t border-white/10 py-4">
+    <p class="mx-auto max-w-6xl px-6 text-xs text-slate-500">
+      &copy; {currentYear} BUILD3R. All rights reserved.
+    </p>
+  </div>
+</footer>

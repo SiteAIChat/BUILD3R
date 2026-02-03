@@ -1,0 +1,53 @@
+---
+import MarketingLayout from '@/layouts/MarketingLayout.astro';
+import Section from '@/components/Section.astro';
+import { resources } from '@/lib/content/resources';
+import { services } from '@/lib/content/services';
+---
+
+<MarketingLayout title="Resources | BUILD3R" description="Short, tactical guides to prep for discovery, automation, and launch.">
+  <div class="space-y-24 pb-24">
+    <section class="relative -mt-[96px] overflow-hidden bg-ink-900 pt-[96px]">
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-[#0a0e1a] via-ink-900 to-[#1a0a2e]"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute top-[-10%] right-[-5%] h-[28rem] w-[28rem] bg-gradient-to-br from-brand-purple-600/35 via-brand-blue-600/20 to-transparent hero-blob"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute -bottom-32 left-[-10%] h-[24rem] w-[24rem] bg-gradient-to-br from-brand-blue-500/25 via-brand-purple-500/15 to-transparent hero-blob-alt"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 pattern-dots" style="--pattern-color: rgba(148, 163, 184, 0.06);"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 pattern-noise opacity-30"></div>
+      <div class="relative mx-auto w-full max-w-4xl px-6 pb-20 pt-24 text-center md:px-8">
+        <p class="mx-auto inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.5em] text-brand-purple-300 backdrop-blur">
+          Resources
+        </p>
+        <h1 class="mt-6 text-4xl font-semibold tracking-tight text-white md:text-5xl">
+          Short, tactical guides
+        </h1>
+        <p class="mt-4 text-lg leading-relaxed text-slate-300">
+          Use these playbooks to prep for discovery, automation, and launch. Each post links to the right service so you know how we can help.
+        </p>
+      </div>
+    </section>
+
+    <Section class="bg-white" title="Latest guides">
+      <div class="grid gap-8 md:grid-cols-2">
+        {resources.map((post) => {
+          const relatedService = services.find((service) => service.slug === post.serviceSlug);
+          return (
+            <article class="group relative overflow-hidden rounded-xl2 border border-ink-200/60 bg-white/90 p-6 shadow-soft transition hover:-translate-y-1 hover:border-brand-blue-200 hover:shadow-xl">
+              <p class="text-xs font-semibold uppercase tracking-[0.35em] text-brand-blue-500">
+                {relatedService?.shortName ?? "Guide"}
+              </p>
+              <h3 class="mt-4 text-xl font-semibold text-ink-900 group-hover:text-brand-blue-700">{post.title}</h3>
+              <p class="mt-3 text-sm leading-relaxed text-ink-600">{post.summary}</p>
+              <div class="mt-6 flex items-center justify-between text-xs uppercase tracking-[0.3em] text-ink-400">
+                <span>{post.readingTime}</span>
+                <a href={`/resources/${post.slug}`} class="text-sm font-semibold text-brand-blue-600 transition hover:text-brand-blue-700">
+                  Read →
+                </a>
+              </div>
+              <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 opacity-0 transition group-hover:opacity-100 bg-gradient-to-br from-brand-blue-100/40 via-white to-brand-purple-100/30"></div>
+            </article>
+          );
+        })}
+      </div>
+    </Section>
+  </div>
+</MarketingLayout>

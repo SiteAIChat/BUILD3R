@@ -1,0 +1,62 @@
+---
+import BookCallLink from './BookCallLink.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  primaryHref: string;
+  primaryLabel: string;
+  secondaryHref?: string;
+  secondaryLabel?: string;
+}
+
+const { title, description, primaryHref, primaryLabel, secondaryHref, secondaryLabel } = Astro.props;
+---
+
+<div class="relative mx-auto w-full max-w-6xl overflow-hidden rounded-xl2 border border-white/10 bg-ink-900 px-10 py-12 text-white shadow-soft">
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-0 bg-gradient-to-br from-brand-blue-900/30 via-brand-purple-800/30 to-transparent"
+  />
+  <div aria-hidden="true" class="pointer-events-none absolute inset-0 pattern-noise opacity-40" />
+  <div class="relative flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
+    <div class="space-y-3">
+      <h3 class="text-2xl font-semibold tracking-tight">{title}</h3>
+      <p class="text-sm text-slate-200">{description}</p>
+    </div>
+    <div class="flex flex-col gap-4 sm:flex-row">
+      {primaryHref === "/book-a-call" ? (
+        <BookCallLink
+          source="cta"
+          class="inline-flex items-center justify-center gap-2 rounded-xl2 bg-gradient-to-br from-brand-blue-500 via-brand-purple-600 to-brand-blue-800 px-5 py-3 text-sm font-semibold text-white shadow-soft transition hover:-translate-y-0.5 hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue-300"
+        >
+          {primaryLabel}
+        </BookCallLink>
+      ) : (
+        <a
+          href={primaryHref}
+          class="inline-flex items-center justify-center gap-2 rounded-xl2 bg-gradient-to-br from-brand-blue-500 via-brand-purple-600 to-brand-blue-800 px-5 py-3 text-sm font-semibold text-white shadow-soft transition hover:-translate-y-0.5 hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue-300"
+        >
+          {primaryLabel}
+        </a>
+      )}
+      {secondaryHref && secondaryLabel && (
+        secondaryHref === "/book-a-call" ? (
+          <BookCallLink
+            source="cta-secondary"
+            class="inline-flex items-center justify-center gap-2 rounded-xl2 border border-white/30 px-5 py-3 text-sm font-semibold text-white/90 transition hover:-translate-y-0.5 hover:border-white/60 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+          >
+            {secondaryLabel}
+          </BookCallLink>
+        ) : (
+          <a
+            href={secondaryHref}
+            class="inline-flex items-center justify-center gap-2 rounded-xl2 border border-white/30 px-5 py-3 text-sm font-semibold text-white/90 transition hover:-translate-y-0.5 hover:border-white/60 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+          >
+            {secondaryLabel}
+          </a>
+        )
+      )}
+    </div>
+  </div>
+</div>

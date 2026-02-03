@@ -1,0 +1,133 @@
+---
+import MarketingLayout from '@/layouts/MarketingLayout.astro';
+import BookCallLink from '@/components/BookCallLink.astro';
+import EstimatorForm from '@/components/EstimatorForm.astro';
+import Section from '@/components/Section.astro';
+import { caseStudies } from '@/lib/content/cases';
+
+const costDrivers = [
+  {
+    title: "Complexity",
+    description: "Integrations, compliance, and number of systems increase engineering effort."
+  },
+  {
+    title: "Scope",
+    description: "More personas, screens, or workflows require additional discovery and QA."
+  },
+  {
+    title: "Speed",
+    description: "Accelerated timelines involve parallel workstreams and expanded staffing."
+  }
+];
+
+const inclusions = [
+  "Strategy sprint with success metrics and roadmap.",
+  "Weekly demos and written summaries in your workspace.",
+  "Accessibility, performance, and SEO checks before launch.",
+  "Launch support plus analytics instrumentation and monitoring."
+];
+---
+
+<MarketingLayout title="Pricing | BUILD3R" description="See your estimate in minutes. Answer a few prompts to generate a tailored range with timelines and a recommended package.">
+  <div class="space-y-24 pb-24">
+    <section class="relative -mt-[96px] overflow-hidden bg-ink-900 pt-[96px]">
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-[#0a0e1a] via-ink-900 to-[#0e1a0a]"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute top-[-10%] left-[20%] h-[30rem] w-[30rem] bg-gradient-to-br from-brand-green-500/30 via-brand-blue-600/20 to-brand-green-700/10 hero-blob"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute -bottom-36 right-[-10%] h-[24rem] w-[24rem] bg-gradient-to-br from-brand-blue-600/25 via-brand-purple-500/15 to-transparent hero-blob-alt"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 pattern-dots" style="--pattern-color: rgba(148, 163, 184, 0.06);"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 pattern-noise opacity-30"></div>
+      <div class="relative mx-auto w-full max-w-4xl px-6 pb-20 pt-24 text-center md:px-8">
+        <p class="mx-auto inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.5em] text-brand-green-300 backdrop-blur">
+          Pricing
+        </p>
+        <h1 class="mt-6 text-4xl font-semibold tracking-tight text-white md:text-5xl">
+          See your estimate in minutes
+        </h1>
+        <p class="mt-4 text-lg leading-relaxed text-slate-300">
+          Answer a few prompts to generate a tailored range with timelines and a recommended package. We store the estimate so we can discuss the details on a call.
+        </p>
+      </div>
+    </section>
+
+    <Section class="bg-white" title="Estimator">
+      <EstimatorForm />
+    </Section>
+
+    <Section
+      class="bg-white"
+      eyebrow="Recent examples"
+      title="What similar teams invested"
+      description="Every engagement includes strategy, build execution, analytics instrumentation, and handoff."
+    >
+      <div class="grid gap-10 md:grid-cols-2">
+        {caseStudies.map((item) => (
+          <article class="group relative overflow-hidden rounded-xl2 border border-ink-200/70 bg-white/90 p-8 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-brand-blue-200 hover:shadow-xl">
+            <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-brand-blue-200 via-white to-brand-green-100 opacity-0 transition group-hover:opacity-20"></div>
+            <p class="text-xs font-semibold uppercase tracking-[0.35em] text-brand-blue-500">{item.services.join(" · ")}</p>
+            <h3 class="mt-4 text-lg font-semibold text-ink-900 group-hover:text-brand-blue-700">{item.title}</h3>
+            <p class="mt-4 text-sm leading-relaxed text-ink-600">{item.teaser}</p>
+            <dl class="mt-8 grid gap-4 text-sm text-ink-500">
+              <div>
+                <dt class="text-xs uppercase tracking-[0.3em] text-ink-400">Timeline</dt>
+                <dd class="text-base font-semibold text-ink-900">{item.weeks}</dd>
+              </div>
+              <div>
+                <dt class="text-xs uppercase tracking-[0.3em] text-ink-400">Range</dt>
+                <dd class="text-base font-semibold text-ink-900">{item.priceRange}</dd>
+              </div>
+            </dl>
+          </article>
+        ))}
+      </div>
+    </Section>
+
+    <Section
+      class="bg-white"
+      eyebrow="Cost drivers"
+      title="What influences pricing"
+      description="We stay transparent about how we arrive at your estimate—all inputs are tied to effort, complexity, and risk."
+    >
+      <div class="grid gap-6 md:grid-cols-3">
+        {costDrivers.map((driver) => (
+          <article class="rounded-xl2 border border-ink-200/60 bg-white/90 p-6 shadow-soft">
+            <h3 class="text-lg font-semibold text-ink-900">{driver.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-ink-600">{driver.description}</p>
+          </article>
+        ))}
+      </div>
+    </Section>
+
+    <Section
+      class="pattern-dots bg-ink-900 text-slate-200"
+      eyebrow="Included with every engagement"
+      eyebrowClassName="text-brand-green-400"
+      title="Playbooks, analytics, and ongoing care"
+      titleClassName="text-white"
+      descriptionClassName="text-slate-300"
+      style="--pattern-color: rgba(148, 163, 184, 0.12);"
+      description="Regardless of the package you choose, every project includes these essentials."
+    >
+      <ul class="grid gap-4 text-sm text-slate-200 md:grid-cols-2">
+        {inclusions.map((item) => (
+          <li class="rounded-xl2 border border-white/10 bg-white/10 p-4 shadow-soft backdrop-blur">{item}</li>
+        ))}
+      </ul>
+    </Section>
+
+    <Section
+      class="bg-white"
+      eyebrow="Need a walkthrough?"
+      title="Prefer to talk it through?"
+      description="Share context and we'll hop on a 15-minute call to explore fit."
+    >
+      <div class="rounded-xl2 border border-ink-200/60 bg-white/90 p-8 shadow-soft">
+        <p class="text-sm leading-relaxed text-ink-600">
+          Already filled out the estimator? Reference your estimate ID and we'll pick up where you left off.
+        </p>
+        <BookCallLink source="pricing-connect" class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-brand-blue-600 transition hover:text-brand-blue-700">
+          Book a call →
+        </BookCallLink>
+      </div>
+    </Section>
+  </div>
+</MarketingLayout>

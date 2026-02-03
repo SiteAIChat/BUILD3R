@@ -1,0 +1,45 @@
+---
+import LegalLayout from '@/layouts/LegalLayout.astro';
+const year = new Date().getFullYear();
+---
+
+<LegalLayout title="Privacy Policy | BUILD3R" description="BUILD3R Privacy Policy">
+  <div class="space-y-12 pb-20">
+    <section class="mx-auto w-full max-w-4xl px-6 pt-20">
+      <p class="text-xs font-semibold uppercase tracking-[0.3em] text-primary-500">Privacy</p>
+      <h1 class="mt-4 text-4xl font-semibold text-slate-900">Privacy Policy</h1>
+      <p class="mt-4 text-sm text-slate-600">Last updated: {year}</p>
+    </section>
+
+    <section class="mx-auto w-full max-w-4xl space-y-6 px-6 text-sm text-slate-600">
+      <div>
+        <h2 class="text-lg font-semibold text-slate-900">Information we collect</h2>
+        <p class="mt-2">
+          We collect the details you share through our estimator, lead forms, and call bookings—typically name, email, company, project context, and estimate preferences. We also capture analytics events described on the Pricing page.
+        </p>
+      </div>
+      <div>
+        <h2 class="text-lg font-semibold text-slate-900">How we use information</h2>
+        <p class="mt-2">
+          Data is used to provide estimates, prepare proposals, and improve our services. We do not sell your data or share it with third parties except for essential infrastructure (Cloudflare, analytics providers, scheduling tools).
+        </p>
+      </div>
+      <div>
+        <h2 class="text-lg font-semibold text-slate-900">Data retention</h2>
+        <p class="mt-2">
+          Lead and estimate data is stored in our D1 database and retained for up to 24 months or until you request removal. You can request deletion at any time by emailing privacy@build3r.io.
+        </p>
+      </div>
+      <div>
+        <h2 class="text-lg font-semibold text-slate-900">Your rights</h2>
+        <p class="mt-2">
+          You can request access, updates, or deletion of your data. We comply with applicable privacy regulations including GDPR and CCPA to the extent required.
+        </p>
+      </div>
+      <div>
+        <h2 class="text-lg font-semibold text-slate-900">Contact</h2>
+        <p class="mt-2">Questions? Email privacy@build3r.io.</p>
+      </div>
+    </section>
+  </div>
+</LegalLayout>

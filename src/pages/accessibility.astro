@@ -1,0 +1,35 @@
+---
+import LegalLayout from '@/layouts/LegalLayout.astro';
+const year = new Date().getFullYear();
+---
+
+<LegalLayout title="Accessibility Statement | BUILD3R" description="BUILD3R Accessibility Statement">
+  <div class="space-y-12 pb-20">
+    <section class="mx-auto w-full max-w-4xl px-6 pt-20">
+      <p class="text-xs font-semibold uppercase tracking-[0.3em] text-primary-500">Accessibility</p>
+      <h1 class="mt-4 text-4xl font-semibold text-slate-900">Accessibility Statement</h1>
+      <p class="mt-4 text-sm text-slate-600">Last updated: {year}</p>
+    </section>
+
+    <section class="mx-auto w-full max-w-4xl space-y-6 px-6 text-sm text-slate-600">
+      <div>
+        <h2 class="text-lg font-semibold text-slate-900">Our commitment</h2>
+        <p class="mt-2">
+          Build3r is dedicated to making our digital experiences accessible to everyone. We aim to align with WCAG 2.2 AA guidelines and continually improve based on feedback and audits.
+        </p>
+      </div>
+      <div>
+        <h2 class="text-lg font-semibold text-slate-900">Measures we take</h2>
+        <p class="mt-2">
+          We build with semantic HTML, maintain sufficient color contrast, support keyboard navigation, and run accessibility checks before deployment.
+        </p>
+      </div>
+      <div>
+        <h2 class="text-lg font-semibold text-slate-900">Feedback</h2>
+        <p class="mt-2">
+          If you encounter an accessibility barrier, email accessibility@build3r.io with a description of the issue and we will respond within two business days.
+        </p>
+      </div>
+    </section>
+  </div>
+</LegalLayout>

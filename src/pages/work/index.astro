@@ -1,0 +1,57 @@
+---
+import MarketingLayout from '@/layouts/MarketingLayout.astro';
+import Section from '@/components/Section.astro';
+import { caseStudies } from '@/lib/content/cases';
+---
+
+<MarketingLayout title="Work | BUILD3R" description="Outcome-first projects anchored in business KPIs.">
+  <div class="space-y-24 pb-24">
+    <section class="relative -mt-[96px] overflow-hidden bg-ink-900 pt-[96px]">
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-[#0a0e1a] via-ink-900 to-[#1a0a1e]"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute top-[-5%] left-[-10%] h-[30rem] w-[30rem] bg-gradient-to-br from-brand-green-500/30 via-brand-blue-600/20 to-transparent hero-blob"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute -bottom-32 right-[-10%] h-[26rem] w-[26rem] bg-gradient-to-br from-brand-purple-600/25 via-brand-blue-500/15 to-transparent hero-blob-alt"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 pattern-dots" style="--pattern-color: rgba(148, 163, 184, 0.06);"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 pattern-noise opacity-30"></div>
+      <div class="relative mx-auto w-full max-w-4xl px-6 pb-20 pt-24 text-center md:px-8">
+        <p class="mx-auto inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.5em] text-brand-green-300 backdrop-blur">
+          Work
+        </p>
+        <h1 class="mt-6 text-4xl font-semibold tracking-tight text-white md:text-5xl">
+          Outcome-first projects
+        </h1>
+        <p class="mt-4 text-lg leading-relaxed text-slate-300">
+          Each engagement is anchored in business KPIs—whether that's team efficiency, conversion, or learning velocity.
+        </p>
+      </div>
+    </section>
+
+    <Section
+      class="bg-white"
+      eyebrow="Case studies"
+      eyebrowClassName="text-brand-green-500"
+      title="Proof we build and ship measurable outcomes"
+    >
+      <div class="grid gap-10 md:grid-cols-2">
+        {caseStudies.map((item) => (
+          <article class="group relative flex h-full flex-col overflow-hidden rounded-xl2 border border-ink-200/70 bg-white/90 p-8 text-ink-600 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-brand-blue-200 hover:shadow-xl">
+            <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-brand-blue-200 via-white to-brand-green-100 opacity-0 transition group-hover:opacity-20"></div>
+            <p class="text-xs font-semibold uppercase tracking-[0.35em] text-brand-green-500">{item.services.join(" · ")}</p>
+            <h3 class="mt-4 text-lg font-semibold text-ink-900 group-hover:text-brand-blue-700">{item.title}</h3>
+            <p class="mt-4 text-sm leading-relaxed">{item.summary}</p>
+            <dl class="mt-8 space-y-3 text-sm text-ink-500">
+              {item.metrics.map((metric) => (
+                <div class="flex items-center justify-between rounded-full bg-ink-50 px-4 py-2">
+                  <dt class="text-xs uppercase tracking-[0.3em] text-ink-400">{metric.label}</dt>
+                  <dd class="text-base font-semibold text-ink-900">{metric.value}</dd>
+                </div>
+              ))}
+            </dl>
+            <a href={`/work/${item.slug}`} class="mt-auto inline-flex items-center gap-2 pt-6 text-sm font-semibold text-brand-blue-600 transition hover:text-brand-blue-700">
+              Read the case →
+            </a>
+          </article>
+        ))}
+      </div>
+    </Section>
+  </div>
+</MarketingLayout>

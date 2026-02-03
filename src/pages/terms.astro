@@ -1,0 +1,47 @@
+---
+import LegalLayout from '@/layouts/LegalLayout.astro';
+const year = new Date().getFullYear();
+---
+
+<LegalLayout title="Terms of Service | BUILD3R" description="BUILD3R Terms of Service">
+  <div class="space-y-12 pb-20">
+    <section class="mx-auto w-full max-w-4xl px-6 pt-20">
+      <p class="text-xs font-semibold uppercase tracking-[0.3em] text-primary-500">Terms</p>
+      <h1 class="mt-4 text-4xl font-semibold text-slate-900">Terms of Service</h1>
+      <p class="mt-4 text-sm text-slate-600">Last updated: {year}</p>
+    </section>
+
+    <section class="mx-auto w-full max-w-4xl space-y-6 px-6 text-sm text-slate-600">
+      <div>
+        <h2 class="text-lg font-semibold text-slate-900">Engagements</h2>
+        <p class="mt-2">
+          Services are delivered according to the scope, timeline, and pricing agreed in your proposal. Additional work outside of scope requires a change order and updated estimate.
+        </p>
+      </div>
+      <div>
+        <h2 class="text-lg font-semibold text-slate-900">Payment</h2>
+        <p class="mt-2">
+          Productized engagements typically require a 50% deposit to reserve the sprint window, with the balance due at delivery. Care plans are billed monthly in advance.
+        </p>
+      </div>
+      <div>
+        <h2 class="text-lg font-semibold text-slate-900">Intellectual property</h2>
+        <p class="mt-2">
+          Upon final payment, you own the work product delivered. Build3r retains the right to reuse underlying frameworks and tools that are not specific to your business.
+        </p>
+      </div>
+      <div>
+        <h2 class="text-lg font-semibold text-slate-900">Confidentiality</h2>
+        <p class="mt-2">
+          We treat all non-public information you share as confidential and only use it to deliver the agreed services.
+        </p>
+      </div>
+      <div>
+        <h2 class="text-lg font-semibold text-slate-900">Liability</h2>
+        <p class="mt-2">
+          To the fullest extent permitted by law, our liability is limited to the fees paid in the twelve months preceding the claim. We are not liable for indirect or consequential damages.
+        </p>
+      </div>
+    </section>
+  </div>
+</LegalLayout>

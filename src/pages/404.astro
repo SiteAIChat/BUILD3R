@@ -1,0 +1,21 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Not Found | BUILD3R">
+  <div class="flex min-h-screen flex-col items-center justify-center bg-slate-50 px-6 text-center">
+    <p class="text-xs font-semibold uppercase tracking-[0.3em] text-primary-500">Not found</p>
+    <h1 class="mt-4 text-4xl font-semibold text-slate-900">We couldn't find that page</h1>
+    <p class="mt-4 max-w-md text-sm text-slate-600">
+      The page you're looking for may have moved. Use the navigation or return home to keep exploring productized services.
+    </p>
+    <div class="mt-6 flex gap-4">
+      <a href="/" class="rounded-full bg-primary-600 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5">
+        Back to home
+      </a>
+      <a href="/book-a-call" class="rounded-full border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:-translate-y-0.5 hover:border-primary-600 hover:text-primary-700">
+        Book a call
+      </a>
+    </div>
+  </div>
+</BaseLayout>

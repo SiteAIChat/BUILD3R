@@ -1,0 +1,257 @@
+---
+// Estimator form - all logic handled client-side
+import { calculateEstimate } from '@/lib/estimator';
+
+const initialPreview = calculateEstimate({
+  projectType: "ai_jumpstart",
+  complexity: "mid",
+  size: "small",
+  speed: "standard",
+  addons: []
+});
+---
+
+<div id="estimator" class="space-y-10">
+  <div class="grid gap-10 lg:grid-cols-[2fr_1fr]">
+    <form id="estimator-form" class="space-y-8">
+      <fieldset class="space-y-4">
+        <legend class="text-sm font-semibold uppercase tracking-[0.25em] text-primary-500">
+          Project type
+        </legend>
+        <div class="grid gap-4 md:grid-cols-2">
+          <label class="flex cursor-pointer flex-col rounded-3xl border border-primary-500 bg-primary-50 p-4" data-radio="projectType" data-value="ai_jumpstart">
+            <span class="text-base font-semibold text-slate-900">AI Jumpstart</span>
+            <span class="mt-2 text-sm text-slate-600">2–3 week pilot to test AI chat, RAG, or lightweight automations.</span>
+            <input type="radio" name="projectType" value="ai_jumpstart" checked class="sr-only" />
+          </label>
+          <label class="flex cursor-pointer flex-col rounded-3xl border border-slate-200 bg-white p-4" data-radio="projectType" data-value="automation">
+            <span class="text-base font-semibold text-slate-900">Automation Accelerator</span>
+            <span class="mt-2 text-sm text-slate-600">Integrations and workflow automation to eliminate repetitive tasks.</span>
+            <input type="radio" name="projectType" value="automation" class="sr-only" />
+          </label>
+          <label class="flex cursor-pointer flex-col rounded-3xl border border-slate-200 bg-white p-4" data-radio="projectType" data-value="mvp">
+            <span class="text-base font-semibold text-slate-900">MVP Builder</span>
+            <span class="mt-2 text-sm text-slate-600">Ship a lean product with auth, data models, and analytics.</span>
+            <input type="radio" name="projectType" value="mvp" class="sr-only" />
+          </label>
+          <label class="flex cursor-pointer flex-col rounded-3xl border border-slate-200 bg-white p-4" data-radio="projectType" data-value="commerce">
+            <span class="text-base font-semibold text-slate-900">Commerce Modules</span>
+            <span class="mt-2 text-sm text-slate-600">Private apps, AI merchandising, and fulfillment automations.</span>
+            <input type="radio" name="projectType" value="commerce" class="sr-only" />
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset class="grid gap-6 md:grid-cols-3">
+        <div class="space-y-3">
+          <legend class="text-sm font-semibold uppercase tracking-[0.25em] text-primary-500">Complexity</legend>
+          <div class="space-y-2">
+            <label class="flex cursor-pointer flex-col rounded-2xl border border-slate-200 bg-white p-4 transition hover:border-slate-300" data-radio="complexity" data-value="low">
+              <span class="text-sm font-semibold text-slate-900">Low</span>
+              <span class="text-xs text-slate-600">Single workflow or limited data sources.</span>
+              <input type="radio" name="complexity" value="low" class="sr-only" />
+            </label>
+            <label class="flex cursor-pointer flex-col rounded-2xl border border-primary-500 bg-primary-50 p-4 transition shadow-sm" data-radio="complexity" data-value="mid">
+              <span class="text-sm font-semibold text-slate-900">Mid</span>
+              <span class="text-xs text-slate-600">Multiple systems or teams involved.</span>
+              <input type="radio" name="complexity" value="mid" checked class="sr-only" />
+            </label>
+            <label class="flex cursor-pointer flex-col rounded-2xl border border-slate-200 bg-white p-4 transition hover:border-slate-300" data-radio="complexity" data-value="high">
+              <span class="text-sm font-semibold text-slate-900">High</span>
+              <span class="text-xs text-slate-600">Regulated industries or complex integrations.</span>
+              <input type="radio" name="complexity" value="high" class="sr-only" />
+            </label>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <legend class="text-sm font-semibold uppercase tracking-[0.25em] text-primary-500">Size</legend>
+          <div class="space-y-2">
+            <label class="flex cursor-pointer flex-col rounded-2xl border border-primary-500 bg-primary-50 p-4 transition shadow-sm" data-radio="size" data-value="small">
+              <span class="text-sm font-semibold text-slate-900">Small</span>
+              <span class="text-xs text-slate-600">Focused scope, 1–2 personas.</span>
+              <input type="radio" name="size" value="small" checked class="sr-only" />
+            </label>
+            <label class="flex cursor-pointer flex-col rounded-2xl border border-slate-200 bg-white p-4 transition hover:border-slate-300" data-radio="size" data-value="medium">
+              <span class="text-sm font-semibold text-slate-900">Medium</span>
+              <span class="text-xs text-slate-600">Broader scope, 3+ personas.</span>
+              <input type="radio" name="size" value="medium" class="sr-only" />
+            </label>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <legend class="text-sm font-semibold uppercase tracking-[0.25em] text-primary-500">Speed</legend>
+          <div class="space-y-2">
+            <label class="flex cursor-pointer flex-col rounded-2xl border border-primary-500 bg-primary-50 p-4 transition shadow-sm" data-radio="speed" data-value="standard">
+              <span class="text-sm font-semibold text-slate-900">Standard</span>
+              <span class="text-xs text-slate-600">Standard cadence with weekly drops.</span>
+              <input type="radio" name="speed" value="standard" checked class="sr-only" />
+            </label>
+            <label class="flex cursor-pointer flex-col rounded-2xl border border-slate-200 bg-white p-4 transition hover:border-slate-300" data-radio="speed" data-value="fast">
+              <span class="text-sm font-semibold text-slate-900">Fast</span>
+              <span class="text-xs text-slate-600">Accelerated delivery with additional overlap.</span>
+              <input type="radio" name="speed" value="fast" class="sr-only" />
+            </label>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="space-y-3">
+        <legend class="text-sm font-semibold uppercase tracking-[0.25em] text-primary-500">Add-ons</legend>
+        <div class="grid gap-4 md:grid-cols-2">
+          <label class="flex cursor-pointer items-center justify-between rounded-2xl border border-slate-200 bg-white p-4" data-addon="design_polish">
+            <div>
+              <span class="text-sm font-semibold text-slate-900">Design polish</span>
+              <span class="ml-2 text-xs text-slate-500">+$800</span>
+            </div>
+            <input type="checkbox" name="addons" value="design_polish" class="sr-only" />
+            <span aria-hidden="true" class="inline-flex h-5 w-5 items-center justify-center rounded-full border border-slate-300 text-transparent">&#x2713;</span>
+          </label>
+          <label class="flex cursor-pointer items-center justify-between rounded-2xl border border-slate-200 bg-white p-4" data-addon="multi_role_auth">
+            <div>
+              <span class="text-sm font-semibold text-slate-900">Multi-role auth</span>
+              <span class="ml-2 text-xs text-slate-500">+$1,200</span>
+            </div>
+            <input type="checkbox" name="addons" value="multi_role_auth" class="sr-only" />
+            <span aria-hidden="true" class="inline-flex h-5 w-5 items-center justify-center rounded-full border border-slate-300 text-transparent">&#x2713;</span>
+          </label>
+          <label class="flex cursor-pointer items-center justify-between rounded-2xl border border-slate-200 bg-white p-4" data-addon="payments">
+            <div>
+              <span class="text-sm font-semibold text-slate-900">Payments &amp; billing</span>
+              <span class="ml-2 text-xs text-slate-500">+$1,400</span>
+            </div>
+            <input type="checkbox" name="addons" value="payments" class="sr-only" />
+            <span aria-hidden="true" class="inline-flex h-5 w-5 items-center justify-center rounded-full border border-slate-300 text-transparent">&#x2713;</span>
+          </label>
+          <label class="flex cursor-pointer items-center justify-between rounded-2xl border border-slate-200 bg-white p-4" data-addon="training">
+            <div>
+              <span class="text-sm font-semibold text-slate-900">Team training &amp; docs</span>
+              <span class="ml-2 text-xs text-slate-500">+$600</span>
+            </div>
+            <input type="checkbox" name="addons" value="training" class="sr-only" />
+            <span aria-hidden="true" class="inline-flex h-5 w-5 items-center justify-center rounded-full border border-slate-300 text-transparent">&#x2713;</span>
+          </label>
+          <label class="flex cursor-pointer items-center justify-between rounded-2xl border border-slate-200 bg-white p-4" data-addon="integrations">
+            <div>
+              <span class="text-sm font-semibold text-slate-900">Advanced integrations</span>
+              <span class="ml-2 text-xs text-slate-500">+$1,200</span>
+            </div>
+            <input type="checkbox" name="addons" value="integrations" class="sr-only" />
+            <span aria-hidden="true" class="inline-flex h-5 w-5 items-center justify-center rounded-full border border-slate-300 text-transparent">&#x2713;</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <button
+        type="submit"
+        class="rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        Get estimate
+      </button>
+    </form>
+
+    <aside class="space-y-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm shadow-slate-200/60">
+      <h3 class="text-lg font-semibold text-slate-900">Estimate preview</h3>
+      <p class="text-sm text-slate-600">
+        These numbers update as you tweak inputs. Submit to lock in the quote, store it for follow-up, and receive a copy by email.
+      </p>
+      <dl class="space-y-4 text-sm text-slate-600">
+        <div>
+          <dt class="text-xs uppercase tracking-[0.25em] text-slate-400">Range</dt>
+          <dd id="preview-range" class="text-2xl font-semibold text-slate-900">
+            $ {initialPreview.low.toLocaleString()} – ${initialPreview.high.toLocaleString()}
+          </dd>
+        </div>
+        <div>
+          <dt class="text-xs uppercase tracking-[0.25em] text-slate-400">Estimated timeline</dt>
+          <dd id="preview-timeline" class="text-base font-semibold text-slate-900">{initialPreview.timelineWeeks} weeks</dd>
+        </div>
+        <div>
+          <dt class="text-xs uppercase tracking-[0.25em] text-slate-400">Recommended package</dt>
+          <dd id="preview-package" class="text-base font-semibold text-slate-900">AI Jumpstart</dd>
+        </div>
+      </dl>
+    </aside>
+  </div>
+</div>
+
+<script>
+  // Estimator client-side logic
+  const basePrice: Record<string, number> = { ai_jumpstart: 6000, automation: 8000, mvp: 15000, commerce: 7000 };
+  const complexityFactor: Record<string, number> = { low: 1.0, mid: 1.4, high: 1.9 };
+  const sizeFactor: Record<string, number> = { small: 1.0, medium: 1.35 };
+  const speedFactor: Record<string, number> = { standard: 1.0, fast: 1.3 };
+  const addonPricing: Record<string, number> = { design_polish: 800, multi_role_auth: 1200, payments: 1400, training: 600, integrations: 1200 };
+  const projectTimelineBase: Record<string, number> = { ai_jumpstart: 3, automation: 4, mvp: 8, commerce: 4 };
+  const packageLabels: Record<string, string> = { ai_jumpstart: "AI Jumpstart", automation: "Automation Accelerator", mvp: "MVP Builder", commerce: "Commerce Modules" };
+
+  function roundHundred(v: number) { return Math.round(v / 100) * 100; }
+
+  function calculate() {
+    const form = document.getElementById('estimator-form') as HTMLFormElement;
+    const fd = new FormData(form);
+    const pt = fd.get('projectType') as string || 'ai_jumpstart';
+    const cx = fd.get('complexity') as string || 'mid';
+    const sz = fd.get('size') as string || 'small';
+    const sp = fd.get('speed') as string || 'standard';
+    const addons = fd.getAll('addons') as string[];
+
+    const addonsTotal = addons.reduce((s, a) => s + (addonPricing[a] || 0), 0);
+    const raw = basePrice[pt] * complexityFactor[cx] * sizeFactor[sz] * speedFactor[sp] + addonsTotal;
+    const low = roundHundred(raw * 0.9);
+    const high = roundHundred(raw * 1.2);
+    const bt = projectTimelineBase[pt];
+    const cd = cx === 'high' ? 2 : cx === 'mid' ? 1 : 0;
+    const sa = sp === 'fast' ? -1 : 0;
+    const sd = sz === 'medium' ? 1 : 0;
+    const weeks = Math.max(2, bt + cd + sd + sa);
+
+    document.getElementById('preview-range')!.textContent = `$ ${low.toLocaleString()} – $${high.toLocaleString()}`;
+    document.getElementById('preview-timeline')!.textContent = `${weeks} weeks`;
+    document.getElementById('preview-package')!.textContent = packageLabels[pt] || '—';
+  }
+
+  // Radio selection styling
+  document.querySelectorAll('[data-radio]').forEach((label) => {
+    label.addEventListener('click', () => {
+      const name = (label as HTMLElement).dataset.radio!;
+      document.querySelectorAll(`[data-radio="${name}"]`).forEach((l) => {
+        l.classList.remove('border-primary-500', 'bg-primary-50', 'shadow-sm');
+        l.classList.add('border-slate-200', 'bg-white');
+      });
+      label.classList.remove('border-slate-200', 'bg-white');
+      label.classList.add('border-primary-500', 'bg-primary-50', 'shadow-sm');
+      setTimeout(calculate, 0);
+    });
+  });
+
+  // Addon toggle styling
+  document.querySelectorAll('[data-addon]').forEach((label) => {
+    label.addEventListener('click', () => {
+      const cb = label.querySelector('input[type="checkbox"]') as HTMLInputElement;
+      const indicator = label.querySelector('span[aria-hidden]') as HTMLElement;
+      // Toggle happens after click
+      setTimeout(() => {
+        if (cb.checked) {
+          label.classList.remove('border-slate-200', 'bg-white');
+          label.classList.add('border-primary-500', 'bg-primary-50');
+          indicator.classList.remove('border-slate-300', 'text-transparent');
+          indicator.classList.add('border-primary-500', 'bg-primary-500', 'text-white');
+        } else {
+          label.classList.remove('border-primary-500', 'bg-primary-50');
+          label.classList.add('border-slate-200', 'bg-white');
+          indicator.classList.remove('border-primary-500', 'bg-primary-500', 'text-white');
+          indicator.classList.add('border-slate-300', 'text-transparent');
+        }
+        calculate();
+      }, 0);
+    });
+  });
+
+  // Form submit
+  document.getElementById('estimator-form')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    calculate();
+  });
+</script>

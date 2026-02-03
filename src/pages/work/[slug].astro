@@ -1,0 +1,89 @@
+---
+import MarketingLayout from '@/layouts/MarketingLayout.astro';
+import CtaBar from '@/components/CtaBar.astro';
+import Section from '@/components/Section.astro';
+import { caseStudies, getCaseBySlug } from '@/lib/content/cases';
+
+export function getStaticPaths() {
+  return caseStudies.map((item) => ({
+    params: { slug: item.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const caseStudy = getCaseBySlug(slug!)!;
+---
+
+<MarketingLayout title={`${caseStudy.title} | BUILD3R Work`} description={caseStudy.summary}>
+  <div class="space-y-24 pb-24">
+    <section class="relative isolate overflow-hidden">
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-ink-900 via-ink-900 to-brand-blue-900"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 pattern-noise opacity-40"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 pattern-dots" style="--pattern-color: rgba(148, 163, 184, 0.12);"></div>
+      <div class="relative mx-auto w-full max-w-4xl px-6 pb-24 pt-28 text-slate-200 md:px-8 md:pt-36">
+        <p class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.5em] text-slate-200">
+          {caseStudy.services.join(" · ")}
+        </p>
+        <h1 class="mt-6 text-4xl font-semibold tracking-tight text-white md:text-5xl">{caseStudy.title}</h1>
+        <p class="mt-4 text-lg leading-relaxed text-slate-300">{caseStudy.summary}</p>
+        <dl class="mt-10 grid gap-4 text-sm text-slate-200 md:grid-cols-3">
+          <div class="rounded-xl2 border border-white/10 bg-white/5 px-4 py-3 backdrop-blur">
+            <dt class="text-xs uppercase tracking-[0.35em] text-slate-400">Timeline</dt>
+            <dd class="mt-2 text-base font-semibold text-white">{caseStudy.weeks}</dd>
+          </div>
+          <div class="rounded-xl2 border border-white/10 bg-white/5 px-4 py-3 backdrop-blur">
+            <dt class="text-xs uppercase tracking-[0.35em] text-slate-400">Investment</dt>
+            <dd class="mt-2 text-base font-semibold text-white">{caseStudy.priceRange}</dd>
+          </div>
+          <div class="rounded-xl2 border border-white/10 bg-white/5 px-4 py-3 backdrop-blur">
+            <dt class="text-xs uppercase tracking-[0.35em] text-slate-400">Focus metrics</dt>
+            <dd class="mt-2 text-base font-semibold text-white">
+              {caseStudy.metrics.map((metric) => metric.label).join(", ")}
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <Section
+      class="bg-white"
+      title="What we did"
+      description="A tight plan of experiments and build steps keeps momentum high while anchoring every sprint to measurable impact."
+    >
+      <ol class="space-y-4 text-sm text-ink-600">
+        {caseStudy.body.map((paragraph) => (
+          <li class="rounded-xl2 border border-ink-200/60 bg-white/90 p-5 shadow-soft">{paragraph}</li>
+        ))}
+      </ol>
+    </Section>
+
+    <Section
+      class="pattern-dots bg-ink-900 text-slate-200"
+      eyebrow="Results"
+      eyebrowClassName="text-brand-green-400"
+      title="Metrics that moved"
+      titleClassName="text-white"
+      descriptionClassName="text-slate-300"
+      style="--pattern-color: rgba(148, 163, 184, 0.12);"
+      description="Outcome tracking stays front-and-center so you can justify the investment internally."
+    >
+      <div class="grid gap-6 md:grid-cols-3">
+        {caseStudy.metrics.map((metric) => (
+          <article class="rounded-xl2 border border-white/10 bg-white/10 p-6 text-white shadow-soft backdrop-blur">
+            <p class="text-xs uppercase tracking-[0.35em] text-slate-300">{metric.label}</p>
+            <p class="mt-4 text-2xl font-semibold">{metric.value}</p>
+          </article>
+        ))}
+      </div>
+    </Section>
+
+    <CtaBar
+      title="Want similar results?"
+      description="Book a working session to outline your workflow, success metrics, and timeline."
+      primaryHref="/book-a-call"
+      primaryLabel="Book a call"
+      secondaryHref="/pricing"
+      secondaryLabel="Open the estimator"
+    />
+  </div>
+</MarketingLayout>
