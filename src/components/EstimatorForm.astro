@@ -143,8 +143,37 @@ const initialPreview = calculateEstimate({
         </div>
       </fieldset>
 
+      <fieldset class="space-y-4 border-t border-slate-200 pt-6">
+        <legend class="text-sm font-semibold uppercase tracking-[0.25em] text-primary-500">Your info</legend>
+        <p class="text-sm text-slate-600">Enter your details to save the estimate and receive a copy.</p>
+        <div class="grid gap-4 md:grid-cols-3">
+          <div>
+            <label for="est-first-name" class="block text-xs font-medium uppercase tracking-[0.25em] text-slate-400">First Name</label>
+            <input id="est-first-name" type="text" name="firstName" required placeholder="First name"
+              class="mt-1 w-full rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200" />
+          </div>
+          <div>
+            <label for="est-last-name" class="block text-xs font-medium uppercase tracking-[0.25em] text-slate-400">Last Name</label>
+            <input id="est-last-name" type="text" name="lastName" placeholder="Last name"
+              class="mt-1 w-full rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200" />
+          </div>
+          <div>
+            <label for="est-email" class="block text-xs font-medium uppercase tracking-[0.25em] text-slate-400">Email</label>
+            <input id="est-email" type="email" name="email" required placeholder="you@company.com"
+              class="mt-1 w-full rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-200" />
+          </div>
+        </div>
+      </fieldset>
+
+      <div id="estimator-error" class="hidden rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700"></div>
+      <div id="estimator-success" class="hidden rounded-2xl border border-primary-500 bg-primary-50 p-4 text-sm text-slate-700">
+        <p class="font-semibold text-slate-900">Estimate saved!</p>
+        <p class="mt-2">Reference ID <span id="estimator-ref" class="font-mono"></span>. Share this during our call and we'll pick up where you left off.</p>
+      </div>
+
       <button
         type="submit"
+        id="estimator-submit-btn"
         class="rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
       >
         Get estimate
@@ -250,8 +279,67 @@ const initialPreview = calculateEstimate({
   });
 
   // Form submit
-  document.getElementById('estimator-form')?.addEventListener('submit', (e) => {
+  document.getElementById('estimator-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    const fd = new FormData(form);
+    const btn = document.getElementById('estimator-submit-btn') as HTMLButtonElement;
+    const errorEl = document.getElementById('estimator-error') as HTMLElement;
+    const successEl = document.getElementById('estimator-success') as HTMLElement;
+    const refEl = document.getElementById('estimator-ref') as HTMLElement;
+
+    const firstName = (fd.get('firstName') as string || '').trim();
+    const email = (fd.get('email') as string || '').trim();
+
+    if (!firstName || !email) {
+      errorEl.textContent = 'Please enter your name and email.';
+      errorEl.classList.remove('hidden');
+      successEl.classList.add('hidden');
+      return;
+    }
+
+    // Calculate current values
     calculate();
+    const rangeText = document.getElementById('preview-range')?.textContent || '';
+    const timelineText = document.getElementById('preview-timeline')?.textContent || '';
+
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+    errorEl.classList.add('hidden');
+    successEl.classList.add('hidden');
+
+    try {
+      const res = await fetch('/api/estimate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName,
+          lastName: (fd.get('lastName') as string || '').trim(),
+          email,
+          projectType: fd.get('projectType') || 'ai_jumpstart',
+          complexity: fd.get('complexity') || 'mid',
+          size: fd.get('size') || 'small',
+          speed: fd.get('speed') || 'standard',
+          addons: fd.getAll('addons'),
+          estimateRange: rangeText,
+          timeline: timelineText,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to submit estimate');
+      }
+
+      refEl.textContent = data.estimateId || '—';
+      successEl.classList.remove('hidden');
+      btn.textContent = 'Estimate saved ✓';
+    } catch (err: any) {
+      errorEl.textContent = err.message || 'Something went wrong. Please try again.';
+      errorEl.classList.remove('hidden');
+      btn.disabled = false;
+      btn.textContent = 'Get estimate';
+    }
   });
 </script>
