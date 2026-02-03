@@ -12,3 +12,4 @@ export default defineConfig({
     sitemap(),
   ],
 });
+// auto-deploy test 1770088532
