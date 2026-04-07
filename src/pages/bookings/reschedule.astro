@@ -1,0 +1,312 @@
+---
+import MarketingLayout from '@/layouts/MarketingLayout.astro';
+
+const API_BASE = 'https://api.vibecontrol.app';
+const TITLE = 'Reschedule booking';
+const DESCRIPTION = 'Pick a new time for your scheduled call.';
+---
+
+<MarketingLayout title={`${TITLE} | BUILD3R`} description={DESCRIPTION}>
+  <section class="mx-auto w-full max-w-3xl px-6 py-16 md:px-8">
+    <p class="inline-flex items-center gap-2 rounded-full border border-ink-200 bg-white/70 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-ink-600">
+      Manage booking
+    </p>
+    <h1 class="mt-6 text-4xl font-semibold tracking-tight text-ink-900 md:text-5xl">{TITLE}</h1>
+
+    <div id="card" class="mt-10 rounded-2xl border border-ink-200 bg-white p-6 shadow-soft">
+      <p id="status" class="text-sm text-ink-600">Loading…</p>
+
+      <div id="current" class="hidden">
+        <p class="text-sm text-ink-600">Currently scheduled:</p>
+        <p id="when" class="mt-1 text-base font-semibold text-ink-900"></p>
+        <p id="who" class="mt-1 text-sm text-ink-600"></p>
+      </div>
+
+      <div id="picker" class="mt-6 hidden">
+        <p id="picker-status" class="text-sm text-ink-600">Loading availability…</p>
+        <div class="mt-4 hidden flex-col gap-6 md:flex-row" id="picker-body">
+          <div class="md:w-48">
+            <h3 class="mb-2 text-xs font-semibold uppercase tracking-wider text-ink-500">Date</h3>
+            <div id="date-list" class="flex max-h-80 flex-col gap-1 overflow-y-auto"></div>
+          </div>
+          <div class="flex-1">
+            <h3 class="mb-2 text-xs font-semibold uppercase tracking-wider text-ink-500">Time</h3>
+            <div id="time-grid" class="grid grid-cols-3 gap-2 md:grid-cols-4"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="confirm-row" class="mt-6 hidden border-t border-ink-200 pt-6">
+        <p class="text-sm text-ink-600">New time:</p>
+        <p id="selected-label" class="text-base font-semibold text-ink-900"></p>
+        <div class="mt-4 flex flex-wrap gap-3">
+          <button
+            id="confirm-btn"
+            type="button"
+            class="inline-flex items-center justify-center rounded-full bg-brand-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-soft transition hover:bg-brand-blue-500 disabled:opacity-50"
+          >
+            Confirm reschedule
+          </button>
+          <a
+            id="cancel-link"
+            class="inline-flex items-center justify-center rounded-full border border-ink-200 px-6 py-3 text-sm font-semibold text-ink-700 transition hover:border-brand-blue-500"
+          >
+            Cancel booking instead
+          </a>
+        </div>
+        <p id="error" class="mt-3 hidden text-sm text-red-600"></p>
+      </div>
+
+      <div id="success" class="hidden">
+        <h2 class="text-xl font-semibold text-ink-900">Booking rescheduled</h2>
+        <p id="success-detail" class="mt-2 text-sm text-ink-600"></p>
+      </div>
+    </div>
+  </section>
+</MarketingLayout>
+
+<script is:inline define:vars={{ API_BASE }}>
+  (function () {
+    const visitorTz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+    const params = new URLSearchParams(window.location.search);
+    let token = params.get('t') || '';
+
+    const statusEl = document.getElementById('status');
+    const currentEl = document.getElementById('current');
+    const whenEl = document.getElementById('when');
+    const whoEl = document.getElementById('who');
+    const pickerEl = document.getElementById('picker');
+    const pickerStatusEl = document.getElementById('picker-status');
+    const pickerBodyEl = document.getElementById('picker-body');
+    const dateListEl = document.getElementById('date-list');
+    const timeGridEl = document.getElementById('time-grid');
+    const confirmRowEl = document.getElementById('confirm-row');
+    const selectedLabelEl = document.getElementById('selected-label');
+    const confirmBtn = document.getElementById('confirm-btn');
+    const cancelLink = document.getElementById('cancel-link');
+    const errorEl = document.getElementById('error');
+    const successEl = document.getElementById('success');
+    const successDetailEl = document.getElementById('success-detail');
+
+    if (!token) {
+      statusEl.textContent = 'Missing booking token. The link may be incomplete.';
+      return;
+    }
+    cancelLink.href = `/bookings/cancel?t=${encodeURIComponent(token)}`;
+
+    let installId = null;
+    let slug = null;
+    let slotsByDate = new Map();
+    let selectedSlot = null;
+    let selectedDate = null;
+
+    function ymdInTz(date, tz) {
+      const parts = new Intl.DateTimeFormat('en-CA', {
+        timeZone: tz,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      }).formatToParts(date);
+      const y = parts.find(p => p.type === 'year').value;
+      const m = parts.find(p => p.type === 'month').value;
+      const d = parts.find(p => p.type === 'day').value;
+      return `${y}-${m}-${d}`;
+    }
+
+    function fmtDate(ymd) {
+      const [y, m, d] = ymd.split('-').map(Number);
+      const dt = new Date(Date.UTC(y, m - 1, d, 12));
+      return new Intl.DateTimeFormat(undefined, {
+        timeZone: visitorTz,
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+      }).format(dt);
+    }
+
+    function fmtTime(iso) {
+      return new Intl.DateTimeFormat(undefined, {
+        timeZone: visitorTz,
+        hour: 'numeric',
+        minute: '2-digit',
+      }).format(new Date(iso));
+    }
+
+    function fmtFull(iso) {
+      return new Intl.DateTimeFormat(undefined, {
+        timeZone: visitorTz,
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        timeZoneName: 'short',
+      }).format(new Date(iso));
+    }
+
+    async function load() {
+      try {
+        const res = await fetch(
+          `${API_BASE}/api/public/bookings/lookup?token=${encodeURIComponent(token)}`,
+        );
+        if (res.status === 404) {
+          statusEl.textContent = 'Booking not found. The link may be expired.';
+          return;
+        }
+        if (!res.ok) throw new Error(`Failed to load booking (${res.status})`);
+        const json = await res.json();
+        if (json.status !== 'confirmed') {
+          statusEl.textContent =
+            json.status === 'cancelled'
+              ? 'This booking has been cancelled and cannot be rescheduled.'
+              : `This booking is in state "${json.status}" and cannot be rescheduled.`;
+          return;
+        }
+        whenEl.textContent = fmtFull(json.starts_at);
+        const bt = json.booking_type;
+        const parts = [];
+        if (bt && bt.name) parts.push(bt.name);
+        if (json.attendee_email_masked) parts.push(json.attendee_email_masked);
+        whoEl.textContent = parts.join(' · ');
+        statusEl.classList.add('hidden');
+        currentEl.classList.remove('hidden');
+
+        if (!bt || !bt.install_id || !bt.slug) {
+          pickerStatusEl.textContent = 'Cannot load availability for this booking type.';
+          pickerEl.classList.remove('hidden');
+          return;
+        }
+        installId = bt.install_id;
+        slug = bt.slug;
+        pickerEl.classList.remove('hidden');
+        await loadSlots();
+      } catch (e) {
+        statusEl.textContent = e.message || 'Failed to load booking';
+      }
+    }
+
+    async function loadSlots() {
+      try {
+        const now = new Date();
+        const from = now.toISOString();
+        const toDate = new Date(now.getTime() + 21 * 24 * 60 * 60 * 1000);
+        const to = toDate.toISOString();
+        const url = `${API_BASE}/api/public/bookings/${encodeURIComponent(installId)}/${encodeURIComponent(slug)}/slots?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&tz=${encodeURIComponent(visitorTz)}`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`Failed to load availability (${res.status})`);
+        const json = await res.json();
+        if (!json.slots || json.slots.length === 0) {
+          pickerStatusEl.textContent = 'No availability in the next 21 days.';
+          return;
+        }
+        slotsByDate = new Map();
+        for (const s of json.slots) {
+          const k = ymdInTz(new Date(s.starts_at), visitorTz);
+          if (!slotsByDate.has(k)) slotsByDate.set(k, []);
+          slotsByDate.get(k).push(s);
+        }
+        pickerStatusEl.classList.add('hidden');
+        pickerBodyEl.classList.remove('hidden');
+        pickerBodyEl.classList.add('flex');
+        renderDates();
+      } catch (e) {
+        pickerStatusEl.textContent = e.message || 'Failed to load availability';
+      }
+    }
+
+    function renderDates() {
+      const dates = Array.from(slotsByDate.keys()).sort();
+      dateListEl.innerHTML = '';
+      for (const dk of dates) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = fmtDate(dk);
+        btn.className =
+          'rounded-lg border border-ink-200 px-3 py-2 text-left text-sm text-ink-700 hover:border-brand-blue-500 hover:bg-brand-blue-50';
+        if (dk === selectedDate) {
+          btn.className += ' border-brand-blue-500 bg-brand-blue-50 font-semibold';
+        }
+        btn.addEventListener('click', () => {
+          selectedDate = dk;
+          selectedSlot = null;
+          confirmRowEl.classList.add('hidden');
+          renderDates();
+          renderTimes();
+        });
+        dateListEl.appendChild(btn);
+      }
+      if (!selectedDate && dates.length > 0) {
+        selectedDate = dates[0];
+        renderDates();
+        renderTimes();
+      }
+    }
+
+    function renderTimes() {
+      timeGridEl.innerHTML = '';
+      const slots = (selectedDate && slotsByDate.get(selectedDate)) || [];
+      for (const s of slots) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = fmtTime(s.starts_at);
+        btn.className =
+          'rounded-lg border border-ink-200 px-3 py-2 text-sm text-ink-700 hover:border-brand-blue-500 hover:bg-brand-blue-50';
+        if (selectedSlot && selectedSlot.starts_at === s.starts_at) {
+          btn.className += ' border-brand-blue-500 bg-brand-blue-50 font-semibold';
+        }
+        btn.addEventListener('click', () => {
+          selectedSlot = s;
+          renderTimes();
+          confirmRowEl.classList.remove('hidden');
+          selectedLabelEl.textContent = fmtFull(s.starts_at);
+        });
+        timeGridEl.appendChild(btn);
+      }
+    }
+
+    confirmBtn.addEventListener('click', async () => {
+      if (!selectedSlot) return;
+      errorEl.classList.add('hidden');
+      confirmBtn.disabled = true;
+      confirmBtn.textContent = 'Rescheduling…';
+      try {
+        const res = await fetch(`${API_BASE}/api/public/bookings/reschedule`, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            cancel_token: token,
+            new_starts_at: selectedSlot.starts_at,
+            new_ends_at: selectedSlot.ends_at,
+            visitor_tz: visitorTz,
+          }),
+        });
+        const json = await res.json().catch(() => ({}));
+        if (res.status === 409) {
+          errorEl.textContent = 'That slot was just taken. Pick another time.';
+          errorEl.classList.remove('hidden');
+          await loadSlots();
+          return;
+        }
+        if (!res.ok) {
+          throw new Error(json.error || `Reschedule failed (${res.status})`);
+        }
+        // Token rotates on reschedule — update for any subsequent action
+        if (json.cancel_token) token = json.cancel_token;
+        pickerEl.classList.add('hidden');
+        currentEl.classList.add('hidden');
+        confirmRowEl.classList.add('hidden');
+        successEl.classList.remove('hidden');
+        successDetailEl.textContent = `Your call has been moved to ${fmtFull(json.starts_at)}.`;
+      } catch (e) {
+        errorEl.textContent = e.message || 'Reschedule failed';
+        errorEl.classList.remove('hidden');
+      } finally {
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = 'Confirm reschedule';
+      }
+    });
+
+    load();
+  })();
+</script>
