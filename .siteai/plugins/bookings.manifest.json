@@ -1,0 +1,29 @@
+{
+  "plugin_key": "bookings",
+  "install_id": "68bc1fef-86fd-433a-9f4e-61937d5f3241",
+  "updated_at": "2026-04-15T19:35:00.000Z",
+  "artifacts": [
+    {
+      "path": "src/pages/bookings/cancel.astro",
+      "kind": "page",
+      "status": "present"
+    },
+    {
+      "path": "src/pages/bookings/reschedule.astro",
+      "kind": "page",
+      "status": "present"
+    },
+    {
+      "path": "src/pages/book/intro-call.astro",
+      "kind": "page",
+      "status": "present",
+      "booking_type_slug": "intro-call"
+    },
+    {
+      "path": "src/pages/book/30-min-meeting.astro",
+      "kind": "page",
+      "status": "present",
+      "booking_type_slug": "30-min-meeting"
+    }
+  ]
+}
