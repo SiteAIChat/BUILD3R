@@ -1,7 +1,12 @@
 ---
 import MarketingLayout from '@/layouts/MarketingLayout.astro';
 
-const CAL_URL = "https://cal.com/build3r/30min";
+const API_BASE = 'https://api.vibecontrol.app';
+const INSTALL_ID = '68bc1fef-86fd-433a-9f4e-61937d5f3241';
+const SLUG = '30-min-meeting';
+const TITLE = '30 Min Meeting';
+const DESCRIPTION = '30-minute discovery call to align on goals, constraints, and timelines.';
+const DURATION = 30;
 
 const agenda = [
   "Clarify goals, budgets, and success metrics",
@@ -59,14 +64,435 @@ const takeaways = [
           We respect your inbox. No spam, ever. Review our <a class="underline" href="/privacy">Privacy Policy</a> and <a class="underline" href="/terms">Terms</a> for details.
         </p>
       </div>
-      <div class="flex-1 rounded-xl2 border border-ink-200/60 bg-white/90 p-4 shadow-soft">
-        <iframe
-          title="Book a call"
-          src={CAL_URL}
-          class="h-[600px] w-full rounded-xl"
-          allowfullscreen
-        ></iframe>
+      <div class="flex-1">
+        <div id="booking-widget" class="rounded-xl2 border border-ink-200/60 bg-white shadow-soft overflow-hidden">
+          <!-- Step 0: Header -->
+          <div id="bw-header" class="border-b border-ink-200/60 bg-ink-900 p-5 text-white">
+            <h3 id="bw-title" class="text-lg font-semibold">{TITLE}</h3>
+            <div class="mt-2 flex items-center gap-4 text-sm text-slate-300">
+              <span class="flex items-center gap-1.5">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10" stroke-width="1.5"/><path stroke-linecap="round" stroke-width="1.5" d="M12 6v6l4 2"/></svg>
+                {DURATION}m
+              </span>
+              <span id="bw-conferencing" class="flex items-center gap-1.5">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="2" y="6" width="14" height="12" rx="2" stroke-width="1.5"/><path stroke-linecap="round" stroke-width="1.5" d="M22 8l-6 4 6 4V8z"/></svg>
+                Google Meet
+              </span>
+              <span id="bw-tz" class="flex items-center gap-1.5">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10" stroke-width="1.5"/><path stroke-width="1.5" d="M2 12h20M12 2a15 15 0 014 10 15 15 0 01-4 10 15 15 0 01-4-10A15 15 0 0112 2z"/></svg>
+                <span id="bw-tz-label"></span>
+              </span>
+            </div>
+          </div>
+
+          <!-- Step 1: Calendar -->
+          <div id="bw-step-calendar" class="p-5">
+            <div id="bw-loading" class="py-12 text-center text-sm text-ink-500">Loading availability...</div>
+            <div id="bw-calendar" class="hidden">
+              <div class="flex items-center justify-between mb-4">
+                <h4 id="bw-month-label" class="text-base font-semibold text-ink-900"></h4>
+                <div class="flex gap-1">
+                  <button type="button" id="bw-prev-month" class="rounded-lg p-2 text-ink-400 hover:bg-ink-100 hover:text-ink-700 transition disabled:opacity-30" disabled>
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                  </button>
+                  <button type="button" id="bw-next-month" class="rounded-lg p-2 text-ink-400 hover:bg-ink-100 hover:text-ink-700 transition">
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="grid grid-cols-7 gap-0 text-center text-xs font-semibold uppercase text-ink-400 mb-2">
+                <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+              </div>
+              <div id="bw-grid" class="grid grid-cols-7 gap-0"></div>
+            </div>
+          </div>
+
+          <!-- Step 2: Time slots -->
+          <div id="bw-step-times" class="hidden p-5">
+            <div class="flex items-center justify-between mb-4">
+              <button type="button" id="bw-back-cal" class="flex items-center gap-1 text-sm text-ink-500 hover:text-ink-700 transition">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                Back
+              </button>
+              <h4 id="bw-day-label" class="text-base font-semibold text-ink-900"></h4>
+              <div class="flex rounded-lg border border-ink-200 text-xs font-medium overflow-hidden">
+                <button type="button" id="bw-12h" class="px-2.5 py-1 bg-ink-900 text-white">12h</button>
+                <button type="button" id="bw-24h" class="px-2.5 py-1 text-ink-500 hover:bg-ink-50">24h</button>
+              </div>
+            </div>
+            <div id="bw-times-list" class="space-y-2 max-h-[28rem] overflow-y-auto pr-1"></div>
+          </div>
+
+          <!-- Step 3: Confirm form -->
+          <div id="bw-step-confirm" class="hidden p-5">
+            <button type="button" id="bw-back-times" class="flex items-center gap-1 text-sm text-ink-500 hover:text-ink-700 transition mb-4">
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+              Back
+            </button>
+            <h4 class="text-lg font-semibold text-ink-900 mb-3">Confirm your details</h4>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span id="bw-confirm-date" class="inline-flex items-center gap-1.5 rounded-full bg-ink-100 px-3 py-1.5 text-xs font-medium text-ink-700">
+                <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" stroke-width="1.5"/><path stroke-width="1.5" d="M3 10h18M16 2v4M8 2v4"/></svg>
+                <span id="bw-confirm-date-text"></span>
+              </span>
+              <span class="inline-flex items-center gap-1.5 rounded-full bg-ink-100 px-3 py-1.5 text-xs font-medium text-ink-700">
+                <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10" stroke-width="1.5"/><path stroke-linecap="round" stroke-width="1.5" d="M12 6v6l4 2"/></svg>
+                {DURATION}m
+              </span>
+            </div>
+            <form id="bw-form" class="space-y-4">
+              <label class="block">
+                <span class="text-sm font-medium text-ink-700">Your name <span class="text-red-500">*</span></span>
+                <input type="text" name="name" required class="mt-1 w-full rounded-lg border border-ink-200 bg-white px-3 py-2.5 text-sm text-ink-900 placeholder-ink-400 focus:border-brand-blue-500 focus:ring-1 focus:ring-brand-blue-500 focus:outline-none transition" placeholder="John Doe" />
+              </label>
+              <label class="block">
+                <span class="text-sm font-medium text-ink-700">Email address <span class="text-red-500">*</span></span>
+                <input type="email" name="email" required class="mt-1 w-full rounded-lg border border-ink-200 bg-white px-3 py-2.5 text-sm text-ink-900 placeholder-ink-400 focus:border-brand-blue-500 focus:ring-1 focus:ring-brand-blue-500 focus:outline-none transition" placeholder="john@example.com" />
+              </label>
+              <label class="block">
+                <span class="text-sm font-medium text-ink-700">Additional notes</span>
+                <textarea name="notes" rows="3" class="mt-1 w-full rounded-lg border border-ink-200 bg-white px-3 py-2.5 text-sm text-ink-900 placeholder-ink-400 focus:border-brand-blue-500 focus:ring-1 focus:ring-brand-blue-500 focus:outline-none transition" placeholder="Please share anything that will help prepare for our meeting."></textarea>
+              </label>
+              <p id="bw-form-error" class="hidden text-sm text-red-600"></p>
+              <div class="flex items-center justify-end gap-3 pt-2">
+                <button type="button" id="bw-cancel-confirm" class="px-4 py-2.5 text-sm font-medium text-ink-600 hover:text-ink-900 transition">Back</button>
+                <button type="submit" id="bw-submit" class="rounded-lg bg-ink-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-ink-800 transition disabled:opacity-50">Confirm</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Step 4: Success -->
+          <div id="bw-step-success" class="hidden p-5">
+            <div class="py-6 text-center">
+              <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-brand-green-100">
+                <svg class="h-6 w-6 text-brand-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              </div>
+              <h4 class="text-lg font-semibold text-ink-900">Booking confirmed!</h4>
+              <p id="bw-success-detail" class="mt-2 text-sm text-ink-600"></p>
+              <p class="mt-3 text-xs text-ink-400">Check your email for confirmation details and calendar invite.</p>
+              <p id="bw-success-cancel" class="mt-2 text-xs text-ink-400 break-all"></p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   </div>
 </MarketingLayout>
+
+<script is:inline define:vars={{ API_BASE, INSTALL_ID, SLUG, DURATION }}>
+(function () {
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+  document.getElementById('bw-tz-label').textContent = tz.replace(/_/g, ' ');
+
+  // State
+  let allSlots = [];
+  let slotsByDate = new Map();
+  let availableDates = new Set();
+  let viewYear, viewMonth; // current calendar view
+  let selectedDate = null;
+  let selectedSlot = null;
+  let use24h = false;
+
+  // Elements
+  const loadingEl = document.getElementById('bw-loading');
+  const calendarEl = document.getElementById('bw-calendar');
+  const monthLabel = document.getElementById('bw-month-label');
+  const gridEl = document.getElementById('bw-grid');
+  const prevBtn = document.getElementById('bw-prev-month');
+  const nextBtn = document.getElementById('bw-next-month');
+
+  const stepCalendar = document.getElementById('bw-step-calendar');
+  const stepTimes = document.getElementById('bw-step-times');
+  const stepConfirm = document.getElementById('bw-step-confirm');
+  const stepSuccess = document.getElementById('bw-step-success');
+  const dayLabel = document.getElementById('bw-day-label');
+  const timesList = document.getElementById('bw-times-list');
+  const confirmDateText = document.getElementById('bw-confirm-date-text');
+  const formEl = document.getElementById('bw-form');
+  const formError = document.getElementById('bw-form-error');
+  const submitBtn = document.getElementById('bw-submit');
+  const successDetail = document.getElementById('bw-success-detail');
+  const successCancel = document.getElementById('bw-success-cancel');
+
+  // Helpers
+  function ymdInTz(date) {
+    const p = new Intl.DateTimeFormat('en-CA', { timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(date);
+    return `${p.find(x => x.type === 'year').value}-${p.find(x => x.type === 'month').value}-${p.find(x => x.type === 'day').value}`;
+  }
+
+  function fmtTime(iso) {
+    return new Intl.DateTimeFormat(undefined, {
+      timeZone: tz,
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: !use24h,
+    }).format(new Date(iso));
+  }
+
+  function fmtFullDate(iso) {
+    return new Intl.DateTimeFormat(undefined, {
+      timeZone: tz,
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+    }).format(new Date(iso));
+  }
+
+  function fmtDayHeader(ymd) {
+    const [y, m, d] = ymd.split('-').map(Number);
+    const dt = new Date(Date.UTC(y, m - 1, d, 12));
+    return new Intl.DateTimeFormat(undefined, {
+      timeZone: tz,
+      weekday: 'short',
+      day: 'numeric',
+    }).format(dt);
+  }
+
+  function showStep(step) {
+    stepCalendar.classList.toggle('hidden', step !== 'calendar');
+    stepTimes.classList.toggle('hidden', step !== 'times');
+    stepConfirm.classList.toggle('hidden', step !== 'confirm');
+    stepSuccess.classList.toggle('hidden', step !== 'success');
+  }
+
+  // Calendar rendering
+  function renderCalendar() {
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    monthLabel.textContent = `${monthNames[viewMonth]} ${viewYear}`;
+
+    const today = ymdInTz(new Date());
+    const todayParts = today.split('-').map(Number);
+
+    // Disable prev if we're at current month
+    prevBtn.disabled = (viewYear === todayParts[0] && viewMonth === todayParts[1] - 1);
+
+    // Build grid
+    gridEl.innerHTML = '';
+    const firstDay = new Date(viewYear, viewMonth, 1).getDay(); // 0=Sun
+    const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+
+    // Previous month fill
+    const prevMonthDays = new Date(viewYear, viewMonth, 0).getDate();
+    for (let i = firstDay - 1; i >= 0; i--) {
+      const cell = document.createElement('div');
+      cell.className = 'flex h-10 items-center justify-center text-sm text-ink-300';
+      cell.textContent = prevMonthDays - i;
+      gridEl.appendChild(cell);
+    }
+
+    // Current month days
+    for (let d = 1; d <= daysInMonth; d++) {
+      const ymd = `${viewYear}-${String(viewMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      const hasSlots = availableDates.has(ymd);
+      const isToday = ymd === today;
+      const isPast = ymd < today;
+      const isSelected = ymd === selectedDate;
+
+      const cell = document.createElement('button');
+      cell.type = 'button';
+      cell.disabled = !hasSlots;
+
+      let cls = 'relative flex h-10 w-full items-center justify-center rounded-lg text-sm transition ';
+      if (isSelected) {
+        cls += 'bg-ink-900 text-white font-semibold ';
+      } else if (hasSlots) {
+        cls += 'font-medium text-ink-900 hover:bg-brand-blue-50 hover:text-brand-blue-700 cursor-pointer ';
+      } else if (isPast) {
+        cls += 'text-ink-300 cursor-default ';
+      } else {
+        cls += 'text-ink-400 cursor-default ';
+      }
+      cell.className = cls;
+      cell.textContent = d;
+
+      // Today dot
+      if (isToday && !isSelected) {
+        const dot = document.createElement('span');
+        dot.className = 'absolute bottom-1 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full bg-ink-900';
+        cell.appendChild(dot);
+      }
+
+      if (hasSlots) {
+        cell.addEventListener('click', () => {
+          selectedDate = ymd;
+          renderCalendar();
+          renderTimes();
+          showStep('times');
+        });
+      }
+
+      gridEl.appendChild(cell);
+    }
+
+    // Next month fill
+    const totalCells = firstDay + daysInMonth;
+    const remaining = (7 - (totalCells % 7)) % 7;
+    for (let i = 1; i <= remaining; i++) {
+      const cell = document.createElement('div');
+      cell.className = 'flex h-10 items-center justify-center text-sm text-ink-300';
+
+      // Show "MAY" label above the 1 of next month
+      if (i === 1 && viewMonth < 11) {
+        const nextMonthName = monthNames[viewMonth + 1].substring(0, 3).toUpperCase();
+        const wrapper = document.createElement('div');
+        wrapper.className = 'flex flex-col items-center';
+        const label = document.createElement('span');
+        label.className = 'text-[9px] font-semibold text-ink-400 leading-none -mb-0.5';
+        label.textContent = nextMonthName;
+        const num = document.createElement('span');
+        num.textContent = i;
+        wrapper.appendChild(label);
+        wrapper.appendChild(num);
+        cell.textContent = '';
+        cell.appendChild(wrapper);
+      } else {
+        cell.textContent = i;
+      }
+      gridEl.appendChild(cell);
+    }
+  }
+
+  // Time slots rendering
+  function renderTimes() {
+    dayLabel.textContent = fmtDayHeader(selectedDate);
+    timesList.innerHTML = '';
+    const slots = slotsByDate.get(selectedDate) || [];
+    for (const s of slots) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'w-full rounded-lg border border-ink-200 px-4 py-3 text-center text-sm font-medium text-ink-700 hover:border-ink-900 hover:bg-ink-900 hover:text-white transition';
+      btn.textContent = fmtTime(s.starts_at);
+      btn.addEventListener('click', () => {
+        selectedSlot = s;
+        confirmDateText.textContent = fmtFullDate(s.starts_at);
+        showStep('confirm');
+      });
+      timesList.appendChild(btn);
+    }
+  }
+
+  // 12h/24h toggle
+  document.getElementById('bw-12h').addEventListener('click', () => {
+    use24h = false;
+    document.getElementById('bw-12h').className = 'px-2.5 py-1 bg-ink-900 text-white';
+    document.getElementById('bw-24h').className = 'px-2.5 py-1 text-ink-500 hover:bg-ink-50';
+    renderTimes();
+  });
+  document.getElementById('bw-24h').addEventListener('click', () => {
+    use24h = true;
+    document.getElementById('bw-24h').className = 'px-2.5 py-1 bg-ink-900 text-white';
+    document.getElementById('bw-12h').className = 'px-2.5 py-1 text-ink-500 hover:bg-ink-50';
+    renderTimes();
+  });
+
+  // Navigation
+  document.getElementById('bw-back-cal').addEventListener('click', () => showStep('calendar'));
+  document.getElementById('bw-back-times').addEventListener('click', () => showStep('times'));
+  document.getElementById('bw-cancel-confirm').addEventListener('click', () => showStep('times'));
+
+  prevBtn.addEventListener('click', () => {
+    viewMonth--;
+    if (viewMonth < 0) { viewMonth = 11; viewYear--; }
+    renderCalendar();
+  });
+  nextBtn.addEventListener('click', () => {
+    viewMonth++;
+    if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+    renderCalendar();
+  });
+
+  // Form submission
+  formEl.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!selectedSlot) return;
+    formError.classList.add('hidden');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Confirming...';
+    try {
+      const fd = new FormData(formEl);
+      const body = {
+        starts_at: selectedSlot.starts_at,
+        ends_at: selectedSlot.ends_at,
+        attendee: {
+          name: fd.get('name'),
+          email: fd.get('email'),
+          tz: tz,
+        },
+        notes: fd.get('notes') || null,
+      };
+      const res = await fetch(
+        `${API_BASE}/api/public/bookings/${encodeURIComponent(INSTALL_ID)}/${encodeURIComponent(SLUG)}/reserve`,
+        { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) },
+      );
+      const json = await res.json().catch(() => ({}));
+      if (res.status === 409) {
+        formError.textContent = 'That slot was just taken. Please pick another time.';
+        formError.classList.remove('hidden');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Confirm';
+        showStep('times');
+        await loadSlots();
+        return;
+      }
+      if (!res.ok) throw new Error(json.error || `Reservation failed (${res.status})`);
+      successDetail.textContent = fmtFullDate(json.starts_at);
+      if (json.cancel_url) {
+        successCancel.textContent = 'Need to cancel? ' + json.cancel_url;
+      }
+      showStep('success');
+    } catch (err) {
+      formError.textContent = err.message || 'Reservation failed';
+      formError.classList.remove('hidden');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Confirm';
+    }
+  });
+
+  // Load slots
+  async function loadSlots() {
+    try {
+      const now = new Date();
+      const from = now.toISOString();
+      const toDate = new Date(now.getTime() + 60 * 24 * 60 * 60 * 1000);
+      const to = toDate.toISOString();
+      const url = `${API_BASE}/api/public/bookings/${encodeURIComponent(INSTALL_ID)}/${encodeURIComponent(SLUG)}/slots?from=${from}&to=${to}&tz=${encodeURIComponent(tz)}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`Failed to load availability (${res.status})`);
+      const json = await res.json();
+
+      if (!json.slots || json.slots.length === 0) {
+        loadingEl.textContent = 'No availability in the next 60 days. Please check back later.';
+        return;
+      }
+
+      allSlots = json.slots;
+      slotsByDate = new Map();
+      availableDates = new Set();
+      for (const s of allSlots) {
+        const k = ymdInTz(new Date(s.starts_at));
+        if (!slotsByDate.has(k)) slotsByDate.set(k, []);
+        slotsByDate.get(k).push(s);
+        availableDates.add(k);
+      }
+
+      // Set initial view to first available month
+      const firstDate = Array.from(availableDates).sort()[0];
+      const [fy, fm] = firstDate.split('-').map(Number);
+      viewYear = fy;
+      viewMonth = fm - 1;
+
+      loadingEl.classList.add('hidden');
+      calendarEl.classList.remove('hidden');
+      renderCalendar();
+    } catch (e) {
+      loadingEl.textContent = e.message || 'Failed to load availability';
+    }
+  }
+
+  loadSlots();
+})();
+</script>
