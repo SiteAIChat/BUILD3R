@@ -1,0 +1,17 @@
+{
+  "plugin_key": "forms",
+  "version": "1.0.0",
+  "artifacts": [
+    { "path": "public/forms-core.js", "kind": "script", "status": "present" },
+    { "path": "src/components/EstimatorForm.astro", "kind": "component", "status": "present" }
+  ],
+  "generated_paths": [
+    "public/forms-core.js",
+    "src/components/EstimatorForm.astro"
+  ],
+  "removed_paths": [
+    "src/pages/api/estimate.ts",
+    "src/lib/estimator.ts"
+  ],
+  "summary": "Forms plugin integration — project estimator powered by SiteAI forms-core engine."
+}
