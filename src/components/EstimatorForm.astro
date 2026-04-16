@@ -309,20 +309,28 @@ const initialPreview = calculateEstimate({
     successEl.classList.add('hidden');
 
     try {
-      const res = await fetch('/api/estimate', {
+      const GATEWAY_URL = 'https://forms.siteai.chat';
+      const SITE_ID = '4092375b-2352-4973-8d1b-e939e92031ab';
+      const FORM_KEY = 'project-estimator';
+      const idempotencyKey = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+
+      const res = await fetch(`${GATEWAY_URL}/submit/${SITE_ID}/${FORM_KEY}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          firstName,
-          lastName: (fd.get('lastName') as string || '').trim(),
-          email,
-          projectType: fd.get('projectType') || 'ai_jumpstart',
-          complexity: fd.get('complexity') || 'mid',
-          size: fd.get('size') || 'small',
-          speed: fd.get('speed') || 'standard',
-          addons: fd.getAll('addons'),
-          estimateRange: rangeText,
-          timeline: timelineText,
+          data: {
+            first_name: firstName,
+            last_name: (fd.get('lastName') as string || '').trim(),
+            email,
+            project_type: fd.get('projectType') || 'ai_jumpstart',
+            complexity: fd.get('complexity') || 'mid',
+            size: fd.get('size') || 'small',
+            speed: fd.get('speed') || 'standard',
+            addons: fd.getAll('addons'),
+            estimate_range: rangeText,
+            estimate_timeline: timelineText,
+          },
+          idempotency_key: idempotencyKey,
         }),
       });
 
@@ -333,7 +341,7 @@ const initialPreview = calculateEstimate({
       }
 
       // Redirect to thank you page
-      const ref = data.estimateId || '';
+      const ref = data.submission_id || '';
       window.location.href = `/estimate-thanks${ref ? '?ref=' + encodeURIComponent(ref) : ''}`;
     } catch (err: any) {
       errorEl.textContent = err.message || 'Something went wrong. Please try again.';
