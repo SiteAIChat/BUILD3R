@@ -309,7 +309,9 @@ const initialPreview = calculateEstimate({
     successEl.classList.add('hidden');
 
     try {
-      const GATEWAY_URL = 'https://forms.siteai.chat';
+      // forms.siteai.chat was retired (NXDOMAIN); edge.vibecontrol.app is the live
+      // VibeControl forms endpoint (GetVibeControl/vibecontrol#3019).
+      const GATEWAY_URL = import.meta.env.PUBLIC_GATEWAY_URL ?? 'https://edge.vibecontrol.app';
       const SITE_ID = '4092375b-2352-4973-8d1b-e939e92031ab';
       const FORM_KEY = 'project-estimator';
       const idempotencyKey = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
