@@ -33,4 +33,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: 291f7219f5f1434144f5aeb9677fcedf
-          command: pages deploy dist --project-name build3r-astro --branch ${{ github.ref_name }}
+          command: pages deploy dist --project-name build3r-website --branch ${{ github.ref_name }}
