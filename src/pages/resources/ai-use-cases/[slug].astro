@@ -1,0 +1,48 @@
+---
+import { getCollection, render } from 'astro:content';
+import MarketingLayout from '@/layouts/MarketingLayout.astro';
+import '@/styles/use-cases.css';
+
+export async function getStaticPaths() {
+  const stories = await getCollection('use-cases');
+  return stories.map(story => {
+    const companion = stories.find(item => item.id === story.data.companion);
+    if (!companion) throw new Error(`Missing companion for ${story.id}`);
+    return { params: { slug: story.id }, props: { story, companion } };
+  });
+}
+
+const { story, companion } = Astro.props;
+const { Content } = await render(story);
+---
+<MarketingLayout pageType="article" title={story.data.title} description={story.data.summary}>
+  <article class="case-library">
+    <header class="case-mast case-article-mast">
+      <div class="case-narrow">
+        <a class="case-back" href="/resources/ai-use-cases/">← How we’d build it</a>
+        <p class="case-label">{story.data.industry}</p>
+        <h1>{story.data.title}</h1>
+        <p class="case-byline">Illustrative scenario · Proposed automation by BUILD3R</p>
+      </div>
+    </header>
+    <div class="case-narrow case-body"><Content /></div>
+    <aside class="case-narrow case-ending">
+      <p>{story.data.invitation}</p>
+      <a class="case-button" data-review-link href={`/workflow-review/?article=${story.id}`}>Book a 20-minute workflow review with Dustin <span aria-hidden="true">→</span></a>
+      <div class="case-next"><span class="case-label">Related use case</span><a href={`/resources/ai-use-cases/${companion.id}/`}>{companion.data.title} →</a></div>
+    </aside>
+  </article>
+</MarketingLayout>
+
+<script>
+  const reviewLink = document.querySelector<HTMLAnchorElement>('[data-review-link]');
+  if (reviewLink) {
+    const current = new URLSearchParams(window.location.search);
+    const target = new URL(reviewLink.href);
+    for (const field of ['utm_source', 'utm_medium', 'utm_campaign']) {
+      const value = current.get(field);
+      if (value) target.searchParams.set(field, value);
+    }
+    reviewLink.href = target.href;
+  }
+</script>

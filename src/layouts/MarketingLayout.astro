@@ -6,12 +6,13 @@ import SiteFooter from '@/components/SiteFooter.astro';
 interface Props {
   title?: string;
   description?: string;
+  pageType?: "website" | "article";
 }
 
-const { title, description } = Astro.props;
+const { title, description, pageType } = Astro.props;
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} pageType={pageType}>
   <div class="flex min-h-screen flex-col bg-ink-50 text-ink-900">
     <SiteNav />
     <main class="flex-1">

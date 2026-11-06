@@ -1,0 +1,51 @@
+---
+import { getCollection } from 'astro:content';
+import MarketingLayout from '@/layouts/MarketingLayout.astro';
+import '@/styles/use-cases.css';
+
+const stories = (await getCollection('use-cases')).sort((a, b) => a.data.order - b.data.order);
+const feature = stories.find(story => story.id === 'supplier-delay')!;
+const others = stories.filter(story => story.id !== feature.id);
+---
+<MarketingLayout title="How We’d Build It · AI use cases" description="Explore six business problems and how BUILD3R would use AI, connected software, and human decisions to solve them.">
+  <div class="case-library">
+    <header class="case-mast">
+      <div class="case-shell">
+        <a class="case-back" href="/resources">← Resources</a>
+        <p class="case-label">BUILD3R / AI use cases</p>
+        <h1>How we’d <em>build it.</em></h1>
+        <p class="case-intro">One business problem in each story. See where we’d use AI, what software we’d connect, and which decisions stay with your team.</p>
+      </div>
+    </header>
+    <div class="case-shell case-list">
+      <a class="case-feature" href={`/resources/ai-use-cases/${feature.id}/`}>
+        <div class="case-feature-copy">
+          <p class="case-label">Featured story / {feature.data.industry}</p>
+          <h2>{feature.data.title}</h2>
+          <p>{feature.data.summary}</p>
+          <span class="case-read">Read the story <span aria-hidden="true">↗</span></span>
+        </div>
+        <div class="order-example" aria-label="Illustrative order desk example">
+          <div class="order-sheet">
+            <div class="order-sheet-head">Order desk <span>Thursday</span></div>
+            <p class="order-note">“The pump seals missed the truck. New ETA Tuesday.”</p>
+            <ul>
+              <li><span>Friday · 8 seals</span><strong>Reserved</strong></li>
+              <li class="at-risk"><span>Friday · 6 seals</span><strong>Call buyer</strong></li>
+              <li><span>Next week · 10 seals</span><strong>On track</strong></li>
+            </ul>
+          </div>
+        </div>
+      </a>
+      <h2 class="case-subtitle">More use cases</h2>
+      <div class="case-grid">
+        {others.map(story => <a class="case-card" href={`/resources/ai-use-cases/${story.id}/`}>
+          <p class="case-label">{story.data.industry}</p>
+          <h3>{story.data.title}</h3>
+          <p>{story.data.summary}</p>
+          <span class="case-read">Read the story <span aria-hidden="true">↗</span></span>
+        </a>)}
+      </div>
+    </div>
+  </div>
+</MarketingLayout>

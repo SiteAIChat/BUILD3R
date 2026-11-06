@@ -1,0 +1,25 @@
+---
+import MarketingLayout from '@/layouts/MarketingLayout.astro';
+import MeetingScheduler from '@/components/MeetingScheduler.astro';
+import '@/styles/use-cases.css';
+---
+<MarketingLayout title="What to expect from your workflow review" description="Bring Dustin one recurring problem. Walk through the handoff and identify a change you can test.">
+  <div class="case-library">
+    <header class="case-mast case-article-mast"><div class="case-narrow">
+      <a class="case-back" href="/resources/ai-use-cases/">← How we’d build it</a>
+      <p class="case-label">Workflow review with Dustin</p>
+      <h1>Bring one piece of work that got stuck.</h1>
+      <p class="case-intro">Think of an invoice that sat in an inbox, or an order someone had to type twice. An example you can describe is all you need.</p>
+    </div></header>
+    <section class="case-narrow case-body">
+      <h2>What to expect</h2>
+      <p>I’m Dustin from BUILD3R. We’ll spend 20 minutes tracing what started the work, who handled it next, and where someone had to chase an answer. Then we’ll pick one change worth trying.</p>
+      <p>Sometimes that’s a setting in a tool you already use. Sometimes it’s a piece of work we can help automate. If you’d like help building it, we can discuss a separate fixed-price project.</p>
+    </section>
+    <section class="case-narrow case-ending">
+      <h2>Choose a time with Dustin</h2>
+      <p>The calendar reserves 30 minutes for the 20-minute review. Times are shown in your local time zone.</p>
+      <MeetingScheduler workflowReview />
+    </section>
+  </div>
+</MarketingLayout>
